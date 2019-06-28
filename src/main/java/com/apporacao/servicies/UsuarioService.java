@@ -17,4 +17,9 @@ public class UsuarioService {
 		repo.save(new Usuario(null, dto.getNome(), dto.getEmail(), dto.getSenha(), dto.getEstado(), dto.getCidade(), dto.getTelefone()));
 	}
 	
+	//receber convite e validar-lo
+	private void getConvite() {
+		
+	}
+	
 }
