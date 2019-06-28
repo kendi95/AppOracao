@@ -1,12 +1,18 @@
 package com.apporacao;
 
+
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.apporacao.model.SuperUsuario;
 import com.apporacao.model.Usuario;
+import com.apporacao.model.enums.TipoUsuario;
+import com.apporacao.repositories.SuperUsuarioRepositorio;
 import com.apporacao.repositories.UsuarioRepositorio;
 
 @SpringBootApplication
@@ -15,7 +21,10 @@ public class AppOraçãoApplication implements CommandLineRunner{
 	@Autowired
 	private UsuarioRepositorio repo;
 	@Autowired
+	private SuperUsuarioRepositorio superUsuarioRepo;
+	@Autowired
 	private BCryptPasswordEncoder encoder;
+	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(AppOraçãoApplication.class, args);
@@ -23,9 +32,18 @@ public class AppOraçãoApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		Usuario usuario = new Usuario(null, "Alisson", "alisson@gmail.com", encoder.encode("123"), "Paraná", "Londrina", "43 99999-2222");
-		repo.save(usuario);
+		SuperUsuario superUsuario = new SuperUsuario(null, "Tal Pastor", "pastor@gmail.com", encoder.encode("123"), 
+				"43 99999-7777", "Londrina", "Paraná");
+		superUsuario.setTipo(TipoUsuario.ADMIN.getTipo());
 		
+		Usuario usuario = new Usuario(null, "Alisson", "alisson@gmail.com", encoder.encode("123"), 
+				"Paraná", "Londrina", "43 99999-2222", superUsuario);
+		usuario.setTipo(TipoUsuario.COMUM.getTipo());
+		
+		superUsuario.setUsuarios(Arrays.asList(usuario));
+		
+		superUsuarioRepo.save(superUsuario);
+		repo.save(usuario);
 	}
 
 }

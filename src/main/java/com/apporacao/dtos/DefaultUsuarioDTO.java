@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.apporacao.model.Usuario;
 
-public class UsuarioDTO implements Serializable {
+public class DefaultUsuarioDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -18,15 +18,16 @@ public class UsuarioDTO implements Serializable {
 	private String cidade;
 	private String estado;
 	
+	private String conviteEncrypt;
 	
 
 	
-	public UsuarioDTO() {
+	public DefaultUsuarioDTO() {
 		super();
 	}
 
 
-	public UsuarioDTO(Long id, String nome, String email, String senha, String estado, String cidade, String telefone) {
+	public DefaultUsuarioDTO(Long id, String nome, String email, String senha, String estado, String cidade, String telefone) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -38,7 +39,7 @@ public class UsuarioDTO implements Serializable {
 	}
 	
 	
-	public UsuarioDTO(Usuario usuario) {
+	public DefaultUsuarioDTO(Usuario usuario) {
 		this.id = usuario.getId();
 		this.nome = usuario.getNome();
 		this.email = usuario.getEmail();
@@ -117,8 +118,9 @@ public class UsuarioDTO implements Serializable {
 		this.telefone = telefone;
 	}
 	
-	
-	
+	public String getConviteEncrypt() {
+		return conviteEncrypt;
+	}
 	
 	
 }

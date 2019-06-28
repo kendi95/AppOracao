@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.apporacao.exceptions.ObjectNotFoundException;
+import com.apporacao.exceptions.TimeExpirationException;
 import com.apporacao.exceptions.UsernameNotFoundException;
 
 @ControllerAdvice
@@ -39,6 +40,16 @@ public class ControllerExceptionHandler {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(standardError);
 	}
 	
+	@ExceptionHandler(TimeExpirationException.class)
+	public ResponseEntity<StandardError> timeExpirated(TimeExpirationException e, HttpServletRequest request){
+		standardError = new StandardError(
+				new Date(System.currentTimeMillis()), 
+				HttpStatus.FORBIDDEN.value(), 
+				"Proibido.", 
+				e.getMessage(), 
+				request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(standardError);
+	}
 	
 	
 }

@@ -31,13 +31,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	private static final String[] publicMatchersPost = {
 		"/login",
-		"/api/new_account"
+		"/api/new_account",
+		"/api/create_convite"
+	};
+	
+	private static final String[] publicMatchersGet = {
+		"/api/find_all_tipo"
 	};
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable();
 		http.authorizeRequests().antMatchers(HttpMethod.POST, publicMatchersPost).permitAll()
+								.antMatchers(HttpMethod.GET, publicMatchersGet).permitAll()
 								.anyRequest().authenticated();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilter(new AuthenticationFilter(authenticationManager(), jwtUtil));
@@ -65,6 +71,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	public BCryptPasswordEncoder bcryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
+	
 	
 	
 }
