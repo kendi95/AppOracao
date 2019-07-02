@@ -34,11 +34,11 @@ public class AppOraçãoApplication implements CommandLineRunner{
 	public void run(String... args) throws Exception {
 		SuperUsuario superUsuario = new SuperUsuario(null, "Tal Pastor", "pastor@gmail.com", encoder.encode("123"), 
 				"43 99999-7777", "Londrina", "Paraná");
-		superUsuario.setTipo(TipoUsuario.ADMIN.getTipo());
+		superUsuario.setTipo(TipoUsuario.ADMIN);
 		
 		Usuario usuario = new Usuario(null, "Alisson", "alisson@gmail.com", encoder.encode("123"), 
 				"Paraná", "Londrina", "43 99999-2222", superUsuario);
-		usuario.setTipo(TipoUsuario.COMUM.getTipo());
+		usuario.setTipo(TipoUsuario.COMUM);
 		
 		superUsuario.setUsuarios(Arrays.asList(usuario));
 		

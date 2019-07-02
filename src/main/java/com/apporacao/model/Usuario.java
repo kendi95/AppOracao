@@ -1,12 +1,16 @@
 package com.apporacao.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+
+import com.apporacao.model.enums.TipoUsuario;
 
 @Entity
 public class Usuario implements Serializable {
@@ -29,7 +33,7 @@ public class Usuario implements Serializable {
 	private SuperUsuario superUsuario;
 	
 	
-	private String tipo;
+	private TipoUsuario tipo;
 	
 	
 	public Usuario() {
@@ -127,13 +131,14 @@ public class Usuario implements Serializable {
 		this.superUsuario = superUsuario;
 	}
 	
-	public String getTipo() {
+	public TipoUsuario getTipo() {
 		return tipo;
 	}
 	
-	public void setTipo(String tipo) {
+	public void setTipo(TipoUsuario tipo) {
 		this.tipo = tipo;
 	}
+	
 	
 	
 

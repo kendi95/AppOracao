@@ -46,7 +46,7 @@ public class UsuarioService {
 					SuperUsuario superUsuario =  superUsuarioRepo.findByEmail(getEmailSender(dto.getConviteEncrypt()));
 					Usuario usuario = new Usuario(null, dto.getNome(), 
 							dto.getEmail(), encoder.encode(dto.getSenha()), dto.getEstado(), dto.getCidade(), dto.getTelefone(), superUsuario);
-					usuario.setTipo(TipoUsuario.COMUM.getTipo());
+					usuario.setTipo(TipoUsuario.COMUM);
 					superUsuario.setUsuarios(Arrays.asList(usuario));
 					repo.save(usuario);
 				}
@@ -54,7 +54,7 @@ public class UsuarioService {
 			} else {
 				SuperUsuario superUsuario = new SuperUsuario(null, dto.getNome(), 
 						dto.getEmail(), encoder.encode(dto.getSenha()), dto.getTelefone(), dto.getCidade(), dto.getEstado());
-				superUsuario.setTipo(TipoUsuario.ADMIN.getTipo());
+				superUsuario.setTipo(TipoUsuario.ADMIN);
 				superUsuarioRepo.save(superUsuario);
 			}
 		}

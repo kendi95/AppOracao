@@ -1,4 +1,4 @@
-package com.apporacao.securityfilters.handlers;
+package com.apporacao.security.filters.handlers;
 
 import java.io.IOException;
 import java.util.Date;
@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.stereotype.Component;
 
+@Component
 public class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
 	
@@ -27,8 +29,8 @@ public class JWTAuthenticationFailureHandler implements AuthenticationFailureHan
 		long date = new Date(System.currentTimeMillis()).getTime();
 		return "{\"timestamp\": "+date+", "+
 				"\"status\": "+HttpStatus.FORBIDDEN.value()+", "+
-				"\"error\": \"Não autorizado\", "+
-				"\"message\": \"Email ou senha inválida\", "+
+				"\"error\": \"Nao autorizado\", "+
+				"\"message\": \"Email ou senha invalida\", "+
 				"\"path\": \"/login\"}";
 	}
 

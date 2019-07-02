@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.apporacao.model.enums.TipoUsuario;
+
 @Entity
 public class SuperUsuario implements Serializable {
 
@@ -30,7 +32,7 @@ public class SuperUsuario implements Serializable {
 	@OneToMany(mappedBy = "superUsuario", cascade = CascadeType.ALL)
 	private List<Usuario> usuarios = new ArrayList<>();
 	
-	private String tipo;
+	private TipoUsuario tipo;
 	
 	
 	public SuperUsuario() {}
@@ -113,11 +115,11 @@ public class SuperUsuario implements Serializable {
 		this.usuarios = usuarios;
 	}
 	
-	public String getTipo() {
+	public TipoUsuario getTipo() {
 		return tipo;
 	}
 	
-	public void setTipo(String tipo) {
+	public void setTipo(TipoUsuario tipo) {
 		this.tipo = tipo;
 	}
 

@@ -2,8 +2,8 @@ package com.apporacao.model.enums;
 
 public enum TipoUsuario {
 
-	COMUM(1, "Comum"),
-	ADMIN(2, "Administrador");
+	COMUM(0, "ROLE_COMUM"),
+	ADMIN(1, "ROLE_ADMIN");
 	
 	private int id;
 	private String tipo;
