@@ -18,15 +18,17 @@ public class UserDetailImplementation implements UserDetails {
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
+	private String name;
 	private String username;
 	private String password;
 	private Collection<? extends GrantedAuthority> authority;
 	private List<TipoUsuario> tipos = new ArrayList<>();
 	
 	
-	public UserDetailImplementation(Long id, String username, String password) {
+	public UserDetailImplementation(Long id, String username, String name, String password) {
 		super();
 		this.id = id;
+		this.name = name;
 		this.username = username;
 		this.password = password;
 	}
@@ -34,6 +36,7 @@ public class UserDetailImplementation implements UserDetails {
 	public UserDetailImplementation(Usuario usuario) {
 		tipos.add(usuario.getTipo());
 		this.id = usuario.getId();
+		this.name = usuario.getNome();
 		this.username = usuario.getEmail();
 		this.password = usuario.getSenha();
 		this.authority = tipos.stream().map(x -> new SimpleGrantedAuthority(x.getTipo())).collect(Collectors.toList());
@@ -43,6 +46,7 @@ public class UserDetailImplementation implements UserDetails {
 	public UserDetailImplementation(SuperUsuario superUsuario) {
 		tipos.add(superUsuario.getTipo());
 		this.id = superUsuario.getId();
+		this.name = superUsuario.getNome();
 		this.username = superUsuario.getEmail();
 		this.password = superUsuario.getSenha();
 		this.authority = tipos.stream().map(x -> new SimpleGrantedAuthority(x.getTipo())).collect(Collectors.toList());
@@ -54,6 +58,9 @@ public class UserDetailImplementation implements UserDetails {
 		return id;
 	}
 	
+	public String getName() {
+		return name;
+	}
 	
 
 	@Override

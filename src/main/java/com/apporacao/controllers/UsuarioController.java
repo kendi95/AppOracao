@@ -1,8 +1,5 @@
 package com.apporacao.controllers;
 
-
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,11 +22,6 @@ public class UsuarioController {
 	public ResponseEntity<Void> insert(@RequestBody DefaultUsuarioDTO dto){
 		service.insert(dto);
 		return ResponseEntity.created(null).build();
-	}
-	
-	@RequestMapping(value = "/find_all_tipo", method = RequestMethod.GET)
-	public ResponseEntity<List<String>> findAllTipo(){
-		return ResponseEntity.ok(service.findAllTipo());
 	}
 	
 	@RequestMapping(value = "/create_convite", method = RequestMethod.POST)

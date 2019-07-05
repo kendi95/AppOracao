@@ -1,9 +1,7 @@
 package com.apporacao.servicies;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.iv.RandomIvGenerator;
@@ -61,12 +59,6 @@ public class UsuarioService {
 		
 	}
 	
-	public List<String> findAllTipo(){
-		List<String> tipos = new ArrayList<>();
-		tipos.add(TipoUsuario.COMUM.getTipo());
-		tipos.add(TipoUsuario.ADMIN.getTipo());
-		return tipos;
-	}
 	
 	public void createConvite(ConviteDTO dto) {
 		pbeConfig();

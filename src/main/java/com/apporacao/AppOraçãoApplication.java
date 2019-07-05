@@ -1,7 +1,6 @@
 package com.apporacao;
 
 
-import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -32,6 +31,7 @@ public class AppOraçãoApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
+		
 		SuperUsuario superUsuario = new SuperUsuario(null, "Tal Pastor", "pastor@gmail.com", encoder.encode("123"), 
 				"43 99999-7777", "Londrina", "Paraná");
 		superUsuario.setTipo(TipoUsuario.ADMIN);
@@ -39,8 +39,6 @@ public class AppOraçãoApplication implements CommandLineRunner{
 		Usuario usuario = new Usuario(null, "Alisson", "alisson@gmail.com", encoder.encode("123"), 
 				"Paraná", "Londrina", "43 99999-2222", superUsuario);
 		usuario.setTipo(TipoUsuario.COMUM);
-		
-		superUsuario.setUsuarios(Arrays.asList(usuario));
 		
 		superUsuarioRepo.save(superUsuario);
 		repo.save(usuario);
