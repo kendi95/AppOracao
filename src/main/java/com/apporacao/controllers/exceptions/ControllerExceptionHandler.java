@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.apporacao.exceptions.AuthorizationException;
+import com.apporacao.exceptions.EmailReceiverNotEqualException;
 import com.apporacao.exceptions.ObjectNotFoundException;
 import com.apporacao.exceptions.TimeExpirationException;
 import com.apporacao.exceptions.UsernameNotFoundException;
@@ -51,6 +53,26 @@ public class ControllerExceptionHandler {
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(standardError);
 	}
 	
+	@ExceptionHandler(EmailReceiverNotEqualException.class)
+	public ResponseEntity<StandardError> emailReceiverNotEqualed(EmailReceiverNotEqualException e, HttpServletRequest request){
+		standardError = new StandardError(
+				new Date(System.currentTimeMillis()), 
+				HttpStatus.BAD_REQUEST.value(), 
+				"Requisição inválida.", 
+				e.getMessage(), 
+				request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standardError);
+	}
 	
+	@ExceptionHandler(AuthorizationException.class)
+	public ResponseEntity<StandardError> notAuthorized(AuthorizationException e, HttpServletRequest request){
+		standardError = new StandardError(
+				new Date(System.currentTimeMillis()), 
+				HttpStatus.UNAUTHORIZED.value(), 
+				"Não autorizado.", 
+				e.getMessage(), 
+				request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(standardError);
+	}
 	
 }

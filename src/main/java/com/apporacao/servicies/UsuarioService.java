@@ -6,17 +6,23 @@ import java.util.Date;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.iv.RandomIvGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.authentication.UserServiceBeanDefinitionParser;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.apporacao.dtos.ConviteDTO;
 import com.apporacao.dtos.DefaultUsuarioDTO;
+import com.apporacao.exceptions.AuthorizationException;
+import com.apporacao.exceptions.EmailReceiverNotEqualException;
+import com.apporacao.exceptions.ObjectNotFoundException;
 import com.apporacao.exceptions.TimeExpirationException;
 import com.apporacao.model.SuperUsuario;
 import com.apporacao.model.Usuario;
 import com.apporacao.model.enums.TipoUsuario;
 import com.apporacao.repositories.SuperUsuarioRepositorio;
 import com.apporacao.repositories.UsuarioRepositorio;
+import com.apporacao.security.UserDetailImplementation;
+import com.apporacao.security.UserDetailServiceImplementation;
 
 @Service
 public class UsuarioService {
@@ -48,6 +54,7 @@ public class UsuarioService {
 					superUsuario.setUsuarios(Arrays.asList(usuario));
 					repo.save(usuario);
 				}
+				throw new EmailReceiverNotEqualException("O email não corresponde com o email do convite.");
 				
 			} else {
 				SuperUsuario superUsuario = new SuperUsuario(null, dto.getNome(), 
@@ -67,7 +74,21 @@ public class UsuarioService {
 		emailServiceImpl.sendCustomMessage(dto.getEmailSender(), dto.getEmailReceiver(), "Convite", "Convite: "+criptografado);
 	}
 	
-	
+	public DefaultUsuarioDTO findByEmail(String email) {
+		UserDetailImplementation user = UserDetailServiceImplementation.getAuthentication();
+		if(user == null || !user.getUsername().equalsIgnoreCase(email)) {
+			throw new AuthorizationException("Email não corresponde com o email de login");
+		}
+		Usuario usuario = repo.findByEmail(email);
+		if(usuario == null) {
+			SuperUsuario superUser = superUsuarioRepo.findByEmail(email);
+			if(superUser == null) {
+				throw new ObjectNotFoundException("Email não encontrado");
+			}
+			return new DefaultUsuarioDTO(superUser);
+		}
+		return new DefaultUsuarioDTO(usuario);
+	}
 	
 	
 	
@@ -95,7 +116,7 @@ public class UsuarioService {
 		pbeConfig();
 		String descrypt = encrypt.decrypt(textEcrypt);
 		String[] emailSender = descrypt.split(" ");
-		System.out.println(emailSender[1]);
+		System.out.println(emailSender[2]);
 		return emailSender[2];
 	}
 	

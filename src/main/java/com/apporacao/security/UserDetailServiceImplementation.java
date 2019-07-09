@@ -1,6 +1,7 @@
 package com.apporacao.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,6 +34,14 @@ public class UserDetailServiceImplementation implements UserDetailsService {
 			
 		}
 		
+	}
+	
+	public static UserDetailImplementation getAuthentication() {
+		try {
+			return (UserDetailImplementation) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		}catch(Exception e) {
+			return null;
+		}
 	}
 
 }

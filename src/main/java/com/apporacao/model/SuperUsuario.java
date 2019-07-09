@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.apporacao.model.enums.TipoUsuario;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class SuperUsuario implements Serializable {
@@ -23,6 +24,7 @@ public class SuperUsuario implements Serializable {
 	private Long id;
 	private String nome;
 	private String email;
+	@JsonIgnore
 	private String senha;
 	
 	private String telefone;

@@ -2,6 +2,7 @@ package com.apporacao.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +29,11 @@ public class UsuarioController {
 	public ResponseEntity<Void> createConvite(@RequestBody ConviteDTO dto){
 		service.createConvite(dto);
 		return ResponseEntity.created(null).build();
+	}
+	
+	@RequestMapping(value = "/usuario/{email}", method = RequestMethod.GET)
+	public ResponseEntity<DefaultUsuarioDTO> findByEmail(@PathVariable("email") String email){
+		return ResponseEntity.ok(service.findByEmail(email));
 	}
 	
 

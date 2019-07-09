@@ -18,6 +18,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.apporacao.security.filters.AuthenticationFilter;
+import com.apporacao.security.filters.AuthorizationFilter;
 import com.apporacao.security.utils.JWTUtil;
 
 @Configuration
@@ -36,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	};
 	
 	private static final String[] publicMatchersGet = {
-		"/api/find_all_tipo"
+		
 	};
 	
 	@Override
@@ -47,6 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 								.anyRequest().authenticated();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilter(new AuthenticationFilter(authenticationManager(), jwtUtil));
+		http.addFilter(new AuthorizationFilter(authenticationManager(), jwtUtil, userDetailService));
 	}
 	
 	
