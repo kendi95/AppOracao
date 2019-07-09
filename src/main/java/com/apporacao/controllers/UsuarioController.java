@@ -36,5 +36,10 @@ public class UsuarioController {
 		return ResponseEntity.ok(service.findByEmail(email));
 	}
 	
+	@RequestMapping(value = "/usuario/{email}", method = RequestMethod.PUT)
+	public ResponseEntity<DefaultUsuarioDTO> update(@RequestBody DefaultUsuarioDTO dto, @PathVariable("email") String email){
+		return ResponseEntity.ok(service.update(dto, email));
+	}
+	
 
 }

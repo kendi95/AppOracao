@@ -90,6 +90,29 @@ public class UsuarioService {
 		return new DefaultUsuarioDTO(usuario);
 	}
 	
+	public DefaultUsuarioDTO update(DefaultUsuarioDTO dto, String email) {
+		UserDetailImplementation user = UserDetailServiceImplementation.getAuthentication();
+		if(user == null || !user.getUsername().equalsIgnoreCase(email)) {
+			throw new AuthorizationException("Email não corresponde com o email de login");
+		}
+		Usuario usuario = repo.findByEmail(email);
+		if(usuario == null) {
+			SuperUsuario superUser = superUsuarioRepo.findByEmail(email);
+			if(superUser == null) {
+				throw new ObjectNotFoundException("Email não encontrado.");
+			}
+			superUser.setEmail(dto.getEmail());
+			superUser.setTelefone(dto.getTelefone());
+			superUser.setCidade(dto.getCidade());
+			superUser.setEstado(dto.getEstado());
+			return new DefaultUsuarioDTO(superUsuarioRepo.save(superUser));
+		}
+		usuario.setEmail(dto.getEmail());
+		usuario.setTelefone(dto.getTelefone());
+		usuario.setCidade(dto.getCidade());
+		usuario.setEstado(dto.getEstado());
+		return new DefaultUsuarioDTO(repo.save(usuario));
+	}
 	
 	
 	
