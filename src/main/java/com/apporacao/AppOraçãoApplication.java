@@ -36,7 +36,7 @@ public class AppOraçãoApplication implements CommandLineRunner{
 				"43 99999-7777", "Londrina", "Paraná");
 		superUsuario.setTipo(TipoUsuario.ADMIN);
 		
-		Usuario usuario = new Usuario(null, "Alisson", "alisson@gmail.com", encoder.encode("123"), 
+		Usuario usuario = new Usuario(null, "Alisson", "kohatsukendi@gmail.com", encoder.encode("123"), 
 				"Paraná", "Londrina", "43 99999-2222", superUsuario);
 		usuario.setTipo(TipoUsuario.COMUM);
 		

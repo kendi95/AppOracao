@@ -3,10 +3,8 @@ package com.apporacao.servicies;
 import java.util.Arrays;
 import java.util.Date;
 
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
-import org.jasypt.iv.RandomIvGenerator;
+import org.jasypt.util.text.BasicTextEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.config.authentication.UserServiceBeanDefinitionParser;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +22,8 @@ import com.apporacao.repositories.UsuarioRepositorio;
 import com.apporacao.security.UserDetailImplementation;
 import com.apporacao.security.UserDetailServiceImplementation;
 
+
+
 @Service
 public class UsuarioService {
 
@@ -36,7 +36,7 @@ public class UsuarioService {
 	@Autowired
 	private EmailServiceImpl emailServiceImpl;
 
-	private StandardPBEStringEncryptor encrypt;
+	private BasicTextEncryptor encrypt;
 	
 	
 	
@@ -155,10 +155,8 @@ public class UsuarioService {
 	
 	
 	private void pbeConfig() {
-		encrypt = new StandardPBEStringEncryptor();
+		encrypt = new BasicTextEncryptor();
 		encrypt.setPassword("");
-		encrypt.setAlgorithm("");
-		encrypt.setIvGenerator(new RandomIvGenerator());
 	}
 	
 }

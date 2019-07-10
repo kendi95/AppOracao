@@ -37,7 +37,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	};
 	
 	private static final String[] publicMatchersGet = {
-		
+		"/auth/verify_email/**"
+	};
+	
+	private static final String[] publicMatchersPacth = {
+			"/auth/new_password_with_code/**"
 	};
 	
 	@Override
@@ -45,6 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		http.cors().and().csrf().disable();
 		http.authorizeRequests().antMatchers(HttpMethod.POST, publicMatchersPost).permitAll()
 								.antMatchers(HttpMethod.GET, publicMatchersGet).permitAll()
+								.antMatchers(HttpMethod.PATCH, publicMatchersPacth).permitAll()
 								.anyRequest().authenticated();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilter(new AuthenticationFilter(authenticationManager(), jwtUtil));
