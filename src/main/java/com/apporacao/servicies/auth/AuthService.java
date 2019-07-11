@@ -1,13 +1,18 @@
 package com.apporacao.servicies.auth;
 
+import java.net.SocketTimeoutException;
 import java.util.Date;
 
-import org.jasypt.util.text.BasicTextEncryptor;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+import org.jasypt.iv.RandomIvGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.apporacao.dtos.SenhaDTO;
+import com.apporacao.exceptions.EncryptionOperationNotPossibleException;
 import com.apporacao.exceptions.ObjectNotFoundException;
 import com.apporacao.exceptions.TimeExpirationException;
 import com.apporacao.model.SuperUsuario;
@@ -29,7 +34,9 @@ public class AuthService {
 	private EmailServiceImpl emailServiceImpl;
 	@Autowired
 	private BCryptPasswordEncoder encoder;
-	private BasicTextEncryptor encrypt;
+	private StandardPBEStringEncryptor encrypt;
+	
+	private static final Logger LOG = LoggerFactory.getLogger(EmailServiceImpl.class);
 	
 	public void confirmEmail(String email) {
 		Usuario usuario = repo.findByEmail(email);
@@ -65,15 +72,23 @@ public class AuthService {
 	
 	
 	private void createCodeSecurity(String email) {
-		pbeConfig();
-		long timeExpiration = new Date(System.currentTimeMillis()+300000).getTime();
-		String criptografado = encrypt.encrypt(email+" "+timeExpiration);
-		emailServiceImpl.sendCustomMessage("kohatsukendi@gmail.com", email, "Código de segurança", "Código: "+criptografado);
+		try {
+			pbeConfig();
+			long timeExpiration = new Date(System.currentTimeMillis()+300000).getTime();
+			String criptografado = encrypt.encrypt(email+" "+timeExpiration);
+			emailServiceImpl.sendCustomMessage("kohatsukendi@gmail.com", email, "Código de segurança", "Código: "+criptografado);
+		} catch (SocketTimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
 	
 	private String getEmail(String textEcrypt) {
+		if(textEcrypt == null) {
+			throw new EncryptionOperationNotPossibleException("Valor do código de segurança não pode ser nulo: "+textEcrypt);
+		}
 		pbeConfig();
 		String descrypt = encrypt.decrypt(textEcrypt);
 		String[] emailSender = descrypt.split(" ");
@@ -81,6 +96,9 @@ public class AuthService {
 	}
 	
 	private long getExpiration(String textEcrypt) {
+		if(textEcrypt == null) {
+			throw new EncryptionOperationNotPossibleException("Valor do código de segurança não pode ser nulo: "+textEcrypt);
+		}
 		pbeConfig();
 		String descrypt = encrypt.decrypt(textEcrypt);
 		String[] emailSender = descrypt.split(" ");
@@ -91,8 +109,10 @@ public class AuthService {
 	
 	
 	private void pbeConfig() {
-		encrypt = new BasicTextEncryptor();
-		encrypt.setPassword("MessageEcryptByCurch");
+		encrypt = new StandardPBEStringEncryptor();
+		encrypt.setAlgorithm("");
+		encrypt.setPassword("");
+		encrypt.setIvGenerator(new RandomIvGenerator());
 	}
 	
 }

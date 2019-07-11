@@ -1,5 +1,7 @@
 package com.apporacao.servicies;
 
+import java.net.SocketTimeoutException;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
@@ -12,9 +14,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
 
-@Service
 public class EmailServiceImpl {
 
 	@Autowired
@@ -36,7 +36,7 @@ public class EmailServiceImpl {
 		LOG.info("Email enviado para: "+msg.getTo());
 	}
 	
-	public void sendCustomMessage(String from, String to, String subject, String message) {
+	public void sendCustomMessage(String from, String to, String subject, String message) throws SocketTimeoutException {
 		MimeMessage msg = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(msg);
 		
@@ -49,7 +49,6 @@ public class EmailServiceImpl {
 			javaMailSender.send(msg);
 			LOG.info("Email enviado para: "+to);
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

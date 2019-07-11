@@ -75,4 +75,17 @@ public class ControllerExceptionHandler {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(standardError);
 	}
 	
+	@ExceptionHandler(NullPointerException.class)
+	public ResponseEntity<StandardError> nullPointer(NullPointerException e, HttpServletRequest request){
+		standardError = new StandardError(
+				new Date(System.currentTimeMillis()), 
+				HttpStatus.BAD_REQUEST.value(), 
+				"Requisição inválida.", 
+				e.getMessage(), 
+				request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standardError);
+	}
+	
+	
+	
 }

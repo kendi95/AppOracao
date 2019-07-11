@@ -1,9 +1,11 @@
 package com.apporacao.servicies;
 
+import java.net.SocketTimeoutException;
 import java.util.Arrays;
 import java.util.Date;
 
-import org.jasypt.util.text.BasicTextEncryptor;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+import org.jasypt.iv.RandomIvGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,7 +38,7 @@ public class UsuarioService {
 	@Autowired
 	private EmailServiceImpl emailServiceImpl;
 
-	private BasicTextEncryptor encrypt;
+	private StandardPBEStringEncryptor encrypt;
 	
 	
 	
@@ -68,10 +70,15 @@ public class UsuarioService {
 	
 	
 	public void createConvite(ConviteDTO dto) {
-		pbeConfig();
-		long timeExpiration = new Date(System.currentTimeMillis()+300000).getTime();
-		String criptografado = encrypt.encrypt(dto.getEmailSender()+" "+dto.getEmailReceiver()+" "+dto.getTipo()+" "+timeExpiration);
-		emailServiceImpl.sendCustomMessage(dto.getEmailSender(), dto.getEmailReceiver(), "Convite", "Convite: "+criptografado);
+		try {
+			pbeConfig();
+			long timeExpiration = new Date(System.currentTimeMillis()+300000).getTime();
+			String criptografado = encrypt.encrypt(dto.getEmailSender()+" "+dto.getEmailReceiver()+" "+dto.getTipo()+" "+timeExpiration);
+			emailServiceImpl.sendCustomMessage(dto.getEmailSender(), dto.getEmailReceiver(), "Convite", "Convite: "+criptografado);
+		}catch(SocketTimeoutException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public DefaultUsuarioDTO findByEmail(String email) {
@@ -155,8 +162,10 @@ public class UsuarioService {
 	
 	
 	private void pbeConfig() {
-		encrypt = new BasicTextEncryptor();
-		encrypt.setPassword("");
+		encrypt = new StandardPBEStringEncryptor();
+		encrypt.setAlgorithm("PBEWithHMACSHA512AndAES_256");
+		encrypt.setPassword("MessageEcryptByCurch");
+		encrypt.setIvGenerator(new RandomIvGenerator());
 	}
 	
 }
