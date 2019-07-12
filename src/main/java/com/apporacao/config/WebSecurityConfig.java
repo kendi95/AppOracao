@@ -32,8 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	private static final String[] publicMatchersPost = {
 		"/login",
-		"/api/new_account",
-		"/api/create_convite"
+		"/api/new_account"
 	};
 	
 	private static final String[] publicMatchersGet = {

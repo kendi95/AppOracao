@@ -31,14 +31,14 @@ public class UsuarioController {
 		return ResponseEntity.created(null).build();
 	}
 	
-	@RequestMapping(value = "/usuario/{email}", method = RequestMethod.GET)
-	public ResponseEntity<DefaultUsuarioDTO> findByEmail(@PathVariable("email") String email){
-		return ResponseEntity.ok(service.findByEmail(email));
+	@RequestMapping(value = "/usuario", method = RequestMethod.GET)
+	public ResponseEntity<DefaultUsuarioDTO> findByEmail(){
+		return ResponseEntity.ok(service.findByEmail());
 	}
 	
-	@RequestMapping(value = "/usuario/{email}", method = RequestMethod.PUT)
-	public ResponseEntity<DefaultUsuarioDTO> update(@RequestBody DefaultUsuarioDTO dto, @PathVariable("email") String email){
-		return ResponseEntity.ok(service.update(dto, email));
+	@RequestMapping(value = "/usuario", method = RequestMethod.PUT)
+	public ResponseEntity<DefaultUsuarioDTO> update(@RequestBody DefaultUsuarioDTO dto){
+		return ResponseEntity.ok(service.update(dto));
 	}
 	
 

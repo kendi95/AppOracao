@@ -71,6 +71,10 @@ public class UsuarioService {
 	
 	public void createConvite(ConviteDTO dto) {
 		try {
+			UserDetailImplementation user = UserDetailServiceImplementation.getAuthentication();
+			if(user == null) {
+				throw new AuthorizationException("Email não corresponde com o email de login");
+			}
 			pbeConfig();
 			long timeExpiration = new Date(System.currentTimeMillis()+300000).getTime();
 			String criptografado = encrypt.encrypt(dto.getEmailSender()+" "+dto.getEmailReceiver()+" "+dto.getTipo()+" "+timeExpiration);
@@ -81,14 +85,14 @@ public class UsuarioService {
 		
 	}
 	
-	public DefaultUsuarioDTO findByEmail(String email) {
+	public DefaultUsuarioDTO findByEmail() {
 		UserDetailImplementation user = UserDetailServiceImplementation.getAuthentication();
-		if(user == null || !user.getUsername().equalsIgnoreCase(email)) {
+		if(user == null) {
 			throw new AuthorizationException("Email não corresponde com o email de login");
 		}
-		Usuario usuario = repo.findByEmail(email);
+		Usuario usuario = repo.findByEmail(user.getUsername());
 		if(usuario == null) {
-			SuperUsuario superUser = superUsuarioRepo.findByEmail(email);
+			SuperUsuario superUser = superUsuarioRepo.findByEmail(user.getUsername());
 			if(superUser == null) {
 				throw new ObjectNotFoundException("Email não encontrado");
 			}
@@ -97,14 +101,14 @@ public class UsuarioService {
 		return new DefaultUsuarioDTO(usuario);
 	}
 	
-	public DefaultUsuarioDTO update(DefaultUsuarioDTO dto, String email) {
+	public DefaultUsuarioDTO update(DefaultUsuarioDTO dto) {
 		UserDetailImplementation user = UserDetailServiceImplementation.getAuthentication();
-		if(user == null || !user.getUsername().equalsIgnoreCase(email)) {
+		if(user == null) {
 			throw new AuthorizationException("Email não corresponde com o email de login");
 		}
-		Usuario usuario = repo.findByEmail(email);
+		Usuario usuario = repo.findByEmail(user.getUsername());
 		if(usuario == null) {
-			SuperUsuario superUser = superUsuarioRepo.findByEmail(email);
+			SuperUsuario superUser = superUsuarioRepo.findByEmail(user.getUsername());
 			if(superUser == null) {
 				throw new ObjectNotFoundException("Email não encontrado.");
 			}
