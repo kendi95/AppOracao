@@ -4,6 +4,7 @@ import java.net.SocketTimeoutException;
 import java.util.Date;
 
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.jasypt.iv.RandomIvGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.apporacao.dtos.SenhaDTO;
-import com.apporacao.exceptions.EncryptionOperationNotPossibleException;
 import com.apporacao.exceptions.ObjectNotFoundException;
 import com.apporacao.exceptions.TimeExpirationException;
 import com.apporacao.model.SuperUsuario;

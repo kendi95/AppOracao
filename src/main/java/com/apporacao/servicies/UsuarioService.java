@@ -163,8 +163,8 @@ public class UsuarioService {
 	
 	private void pbeConfig() {
 		encrypt = new StandardPBEStringEncryptor();
-		encrypt.setAlgorithm("PBEWithHMACSHA512AndAES_256");
-		encrypt.setPassword("MessageEcryptByCurch");
+		encrypt.setAlgorithm("");
+		encrypt.setPassword("");
 		encrypt.setIvGenerator(new RandomIvGenerator());
 	}
 	

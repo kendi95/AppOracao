@@ -1,11 +1,15 @@
 package com.apporacao.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.apporacao.model.enums.TipoUsuario;
@@ -34,6 +38,9 @@ public class Usuario implements Serializable {
 	private SuperUsuario superUsuario;
 	
 	private TipoUsuario tipo;
+	
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+	private List<PedidoOracao> pedidos = new ArrayList<>();
 	
 	
 	
@@ -138,6 +145,14 @@ public class Usuario implements Serializable {
 	
 	public void setTipo(TipoUsuario tipo) {
 		this.tipo = tipo;
+	}
+	
+	public List<PedidoOracao> getPedidos() {
+		return pedidos;
+	}
+	
+	public void setPedidos(List<PedidoOracao> pedidos) {
+		this.pedidos = pedidos;
 	}
 	
 	

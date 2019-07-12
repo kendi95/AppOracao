@@ -36,6 +36,9 @@ public class SuperUsuario implements Serializable {
 	
 	private TipoUsuario tipo;
 	
+	@OneToMany(mappedBy = "superUsuario", cascade = CascadeType.ALL)
+	private List<PedidoOracao> pedidos = new ArrayList<>();
+	
 	
 	public SuperUsuario() {}
 	
@@ -125,6 +128,15 @@ public class SuperUsuario implements Serializable {
 		this.tipo = tipo;
 	}
 
+	public List<PedidoOracao> getPedidos() {
+		return pedidos;
+	}
+	
+	public void setPedidos(List<PedidoOracao> pedidos) {
+		this.pedidos = pedidos;
+	}
+	
+	
 	
 	
 	@Override

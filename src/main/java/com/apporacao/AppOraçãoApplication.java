@@ -8,9 +8,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.apporacao.model.PedidoOracao;
 import com.apporacao.model.SuperUsuario;
 import com.apporacao.model.Usuario;
 import com.apporacao.model.enums.TipoUsuario;
+import com.apporacao.repositories.PedidoOracaoRepositorio;
 import com.apporacao.repositories.SuperUsuarioRepositorio;
 import com.apporacao.repositories.UsuarioRepositorio;
 
@@ -21,6 +23,8 @@ public class AppOraçãoApplication implements CommandLineRunner{
 	private UsuarioRepositorio repo;
 	@Autowired
 	private SuperUsuarioRepositorio superUsuarioRepo;
+	@Autowired
+	private PedidoOracaoRepositorio pedidoRepo;
 	@Autowired
 	private BCryptPasswordEncoder encoder;
 	
@@ -40,8 +44,12 @@ public class AppOraçãoApplication implements CommandLineRunner{
 				"Paraná", "Londrina", "43 99999-2222", superUsuario);
 		usuario.setTipo(TipoUsuario.COMUM);
 		
+		PedidoOracao pedido = new PedidoOracao(null, superUsuario, usuario, "Motivo Geral", "Motivo Pessoal", "Descrição do motivo pessoal");
+		
+		
 		superUsuarioRepo.save(superUsuario);
 		repo.save(usuario);
+		pedidoRepo.save(pedido);
 	}
 
 }
