@@ -1,10 +1,9 @@
 package com.apporacao.servicies;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +30,6 @@ public class PedidoOracaoService {
 	@Autowired
 	private SuperUsuarioRepositorio superUsearioRepo;
 	
-	private static final Logger LOG = LoggerFactory.getLogger(PedidoOracaoService.class);
 	
 	public void createPedido(PedidoOracaoDTO dto) {
 		UserDetailImplementation user = UserDetailServiceImplementation.getAuthentication();
@@ -42,43 +40,79 @@ public class PedidoOracaoService {
 		if(usuario == null) {
 			throw new ObjectNotFoundException("Email não encontrado.");
 		}
-		dto.setSuperUsuario_id(usuario.getSuperUsuario().getId());
-		dto.setUsuario_id(usuario.getId());
-		PedidoOracao pedido = new PedidoOracao(null, usuario.getSuperUsuario(), usuario, dto.getMotivoGeral(), 
-				dto.getMotivoPessoal(), dto.getMotivoDescricao());
-		repo.save(pedido);
 		
+		PedidoOracao pedido = null;
+		if(dto.getIsAnonimo().equalsIgnoreCase("true")) {
+			if(dto.getMotivoGeral() != null) {
+				pedido = new PedidoOracao(null, usuario.getSuperUsuario(), usuario, dto.getMotivoGeral(), 
+						null, null, dto.getIsAnonimo(), new Date(System.currentTimeMillis()));
+			}
+			pedido = new PedidoOracao(null, usuario.getSuperUsuario(), usuario, null, 
+					dto.getMotivoPessoal(), dto.getMotivoDescricao(), dto.getIsAnonimo(), new Date(System.currentTimeMillis()));
+		} else {
+			if(dto.getMotivoGeral() != null) {
+				pedido = new PedidoOracao(null, usuario.getSuperUsuario(), usuario, dto.getMotivoGeral(), 
+						null, null, dto.getIsAnonimo(), new Date(System.currentTimeMillis()));
+			}
+			pedido = new PedidoOracao(null, usuario.getSuperUsuario(), usuario, null, 
+					dto.getMotivoPessoal(), dto.getMotivoDescricao(), dto.getIsAnonimo(), new Date(System.currentTimeMillis()));
+		}
+		repo.save(pedido);
 	}
 	
 	public List<PedidoOracaoDTO> findAll(){
 		UserDetailImplementation user = UserDetailServiceImplementation.getAuthentication();
 		if(user == null) {
 			throw new AuthorizationException("Email não corresponde com o email de login");
-		}
-		List<PedidoOracao> pedidos = repo.findAll();
-		List<PedidoOracaoDTO> list_dtos = new ArrayList<>();
-		Usuario usuario = usuarioRepo.findByEmail(user.getUsername());
-		if(usuario == null) {
-			SuperUsuario superUsuario = superUsearioRepo.findByEmail(user.getUsername());
-			if(superUsuario == null) {
-				throw new ObjectNotFoundException("Email não encontrado.");
-			}
-			for(int i = 0; i < pedidos.size(); i++) {
-				if(pedidos.get(i).getSuperUsuario().getEmail().equalsIgnoreCase(superUsuario.getEmail())) {
-					PedidoOracaoDTO dto = new PedidoOracaoDTO(pedidos.get(i));
-					list_dtos.add(dto);
+		} else {
+			List<PedidoOracao> pedidos = repo.findAll();
+			List<PedidoOracaoDTO> list_dtos = new ArrayList<>();
+			Usuario usuario = usuarioRepo.findByEmail(user.getUsername());
+			if(usuario == null) {
+				SuperUsuario superUsuario = superUsearioRepo.findByEmail(user.getUsername());
+				if(superUsuario == null) {
+					throw new ObjectNotFoundException("Email não encontrado.");
+				} else {
+					for(int i = 0; i < pedidos.size(); i++) {
+						if(pedidos.get(i).getSuperUsuario().getId() == superUsuario.getId()) {
+							if(pedidos.get(i).getIsAnonimo().equalsIgnoreCase("true")) {
+								PedidoOracaoDTO dto = new PedidoOracaoDTO(pedidos.get(i));
+								dto.setIsAnonimo(pedidos.get(i).getIsAnonimo());
+								list_dtos.add(dto);
+							} else {
+								PedidoOracaoDTO dto = new PedidoOracaoDTO(pedidos.get(i));
+								dto.setNome_autor(pedidos.get(i).getUsuario().getNome());
+								dto.setIsAnonimo(pedidos.get(i).getIsAnonimo());
+								list_dtos.add(dto);
+							}
+							
+						}
+					}
+					return list_dtos;
 				}
+				
+			} else {
+				for(int i = 0; i < pedidos.size(); i++) {
+					if(pedidos.get(i).getUsuario().getId() == usuario.getId()) {
+						if(pedidos.get(i).getIsAnonimo().equalsIgnoreCase("true")) {
+							PedidoOracaoDTO dto = new PedidoOracaoDTO(pedidos.get(i));
+							dto.setIsAnonimo(pedidos.get(i).getIsAnonimo());
+							list_dtos.add(dto);
+						} else {
+							PedidoOracaoDTO dto = new PedidoOracaoDTO(pedidos.get(i));
+							dto.setNome_autor(pedidos.get(i).getUsuario().getNome());
+							dto.setIsAnonimo(pedidos.get(i).getIsAnonimo());
+							list_dtos.add(dto);
+						}
+					}
+				}
+				return list_dtos;
 			}
-			return list_dtos;
 		}
 		
-		for(int i = 0; i < pedidos.size(); i++) {
-			if(pedidos.get(i).getUsuario().getEmail().equalsIgnoreCase(usuario.getEmail())) {
-				PedidoOracaoDTO dto = new PedidoOracaoDTO(pedidos.get(i));
-				list_dtos.add(dto);
-			}
-		}
-		return list_dtos;
+		
+		
+		
 	}
 	
 	

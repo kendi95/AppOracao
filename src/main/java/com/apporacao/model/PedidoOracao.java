@@ -9,6 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 public class PedidoOracao implements Serializable {
 
@@ -27,19 +30,24 @@ public class PedidoOracao implements Serializable {
 	private String motivoPessoal;
 	private String motivoDescricao;
 	
+	private String isAnonimo;
+	
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	private Date data_pedido;
 	
 	
 	public PedidoOracao() {}
 	
-	public PedidoOracao(Long id, SuperUsuario superUsuario, Usuario usuario, String motivoGeral, String motivoPessoal, String motivoDescricao) {
+	public PedidoOracao(Long id, SuperUsuario superUsuario, Usuario usuario, 
+			String motivoGeral, String motivoPessoal, String motivoDescricao, String isAnonimo, Date data_pedido) {
 		this.id = id;
 		this.superUsuario = superUsuario;
 		this.usuario = usuario;
 		this.motivoGeral = motivoGeral;
 		this.motivoPessoal = motivoPessoal;
 		this.motivoDescricao = motivoDescricao;
-		this.data_pedido = new Date(System.currentTimeMillis());
+		this.isAnonimo = isAnonimo;
+		this.data_pedido = data_pedido;
 	}
 
 	
@@ -98,6 +106,14 @@ public class PedidoOracao implements Serializable {
 	
 	public void setMotivoPessoal(String motivoPessoal) {
 		this.motivoPessoal = motivoPessoal;
+	}
+	
+	public String getIsAnonimo() {
+		return isAnonimo;
+	}
+	
+	public void setIsAnonimo(String isAnonimo) {
+		this.isAnonimo = isAnonimo;
 	}
 	
 	

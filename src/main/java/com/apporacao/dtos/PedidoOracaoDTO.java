@@ -3,6 +3,7 @@ package com.apporacao.dtos;
 import java.io.Serializable;
 import java.util.Date;
 
+
 import com.apporacao.model.PedidoOracao;
 
 public class PedidoOracaoDTO implements Serializable {
@@ -14,9 +15,6 @@ public class PedidoOracaoDTO implements Serializable {
 	private String motivoGeral;
 	private String motivoPessoal;
 	private String motivoDescricao;
-	
-	private Long superUsuario_id;
-	private Long usuario_id;
 	
 	private String isAnonimo;
 	
@@ -37,8 +35,7 @@ public class PedidoOracaoDTO implements Serializable {
 		this.id = pedido.getId();
 		this.motivoGeral = pedido.getMotivoGeral();
 		this.motivoPessoal = pedido.getMotivoPessoal();
-		this.superUsuario_id = pedido.getSuperUsuario().getId();
-		this.usuario_id = pedido.getUsuario().getId();
+		this.motivoDescricao = pedido.getMotivoDescricao();
 		this.data_pedido = pedido.getData_pedido();
 	}
 
@@ -81,22 +78,6 @@ public class PedidoOracaoDTO implements Serializable {
 	
 	public void setIsAnonimo(String isAnonimo) {
 		this.isAnonimo = isAnonimo;
-	}
-	
-	public Long getSuperUsuario_id() {
-		return superUsuario_id;
-	}
-	
-	public void setSuperUsuario_id(Long superUsuario_id) {
-		this.superUsuario_id = superUsuario_id;
-	}
-	
-	public Long getUsuario_id() {
-		return usuario_id;
-	}
-	
-	public void setUsuario_id(Long usuario_id) {
-		this.usuario_id = usuario_id;
 	}
 	
 	public String getNome_autor() {

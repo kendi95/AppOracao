@@ -6,8 +6,6 @@ import java.util.Date;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.jasypt.iv.RandomIvGenerator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,8 +18,6 @@ import com.apporacao.model.Usuario;
 import com.apporacao.repositories.SuperUsuarioRepositorio;
 import com.apporacao.repositories.UsuarioRepositorio;
 import com.apporacao.servicies.EmailServiceImpl;
-
-
 
 @Service
 public class AuthService {
@@ -36,7 +32,6 @@ public class AuthService {
 	private BCryptPasswordEncoder encoder;
 	private StandardPBEStringEncryptor encrypt;
 	
-	private static final Logger LOG = LoggerFactory.getLogger(EmailServiceImpl.class);
 	
 	public void confirmEmail(String email) {
 		Usuario usuario = repo.findByEmail(email);
