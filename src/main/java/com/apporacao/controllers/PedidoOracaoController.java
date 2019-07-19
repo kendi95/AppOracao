@@ -30,5 +30,10 @@ public class PedidoOracaoController {
 		return ResponseEntity.ok(service.findAll());
 	}
 	
+	@RequestMapping(value="/my_pedidos", method = RequestMethod.GET)
+	public ResponseEntity<List<PedidoOracaoDTO>> findPedidosByUsuario(){
+		return ResponseEntity.ok(service.findPedidosByUsuario());
+	}
+	
 	
 }

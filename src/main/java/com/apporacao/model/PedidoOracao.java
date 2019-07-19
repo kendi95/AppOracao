@@ -1,16 +1,24 @@
 package com.apporacao.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class PedidoOracao implements Serializable {
@@ -21,8 +29,13 @@ public class PedidoOracao implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToOne
-	private SuperUsuario superUsuario;
+	@ManyToMany
+	@JoinTable(name = "PEDIDO_ORACAO_USUARIO",
+		joinColumns = @JoinColumn(name = "pedido_oracao_id"),
+		inverseJoinColumns = @JoinColumn(name = "usuario_id"))
+	private List<Usuario> usuarios = new ArrayList<>(); 
+	
+	@JsonIgnore
 	@OneToOne
 	private Usuario usuario;
 	
@@ -38,10 +51,8 @@ public class PedidoOracao implements Serializable {
 	
 	public PedidoOracao() {}
 	
-	public PedidoOracao(Long id, SuperUsuario superUsuario, Usuario usuario, 
-			String motivoGeral, String motivoPessoal, String motivoDescricao, String isAnonimo, Date data_pedido) {
+	public PedidoOracao(Long id, Usuario usuario, String motivoGeral, String motivoPessoal, String motivoDescricao, String isAnonimo, Date data_pedido) {
 		this.id = id;
-		this.superUsuario = superUsuario;
 		this.usuario = usuario;
 		this.motivoGeral = motivoGeral;
 		this.motivoPessoal = motivoPessoal;
@@ -58,14 +69,6 @@ public class PedidoOracao implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public SuperUsuario getSuperUsuario() {
-		return superUsuario;
-	}
-
-	public void setSuperUsuario(SuperUsuario superUsuario) {
-		this.superUsuario = superUsuario;
 	}
 
 	public Usuario getUsuario() {
@@ -116,6 +119,13 @@ public class PedidoOracao implements Serializable {
 		this.isAnonimo = isAnonimo;
 	}
 	
+	public List<Usuario> getUsuarios() {
+		return usuarios;
+	}
+	
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
+	}
 	
 
 	@Override

@@ -42,79 +42,88 @@ public class PedidoOracaoService {
 		}
 		
 		PedidoOracao pedido = null;
-		if(dto.getIsAnonimo().equalsIgnoreCase("true")) {
-			if(dto.getMotivoGeral() != null) {
-				pedido = new PedidoOracao(null, usuario.getSuperUsuario(), usuario, dto.getMotivoGeral(), 
-						null, null, dto.getIsAnonimo(), new Date(System.currentTimeMillis()));
-			}
-			pedido = new PedidoOracao(null, usuario.getSuperUsuario(), usuario, null, 
-					dto.getMotivoPessoal(), dto.getMotivoDescricao(), dto.getIsAnonimo(), new Date(System.currentTimeMillis()));
+		if(dto.getMotivoGeral() != null) {
+			pedido = new PedidoOracao(null, usuario, dto.getMotivoGeral(), 
+					null, null, dto.getIsAnonimo(), new Date(System.currentTimeMillis()));
 		} else {
-			if(dto.getMotivoGeral() != null) {
-				pedido = new PedidoOracao(null, usuario.getSuperUsuario(), usuario, dto.getMotivoGeral(), 
-						null, null, dto.getIsAnonimo(), new Date(System.currentTimeMillis()));
-			}
-			pedido = new PedidoOracao(null, usuario.getSuperUsuario(), usuario, null, 
+			pedido = new PedidoOracao(null, usuario, null, 
 					dto.getMotivoPessoal(), dto.getMotivoDescricao(), dto.getIsAnonimo(), new Date(System.currentTimeMillis()));
 		}
 		repo.save(pedido);
 	}
 	
+
 	public List<PedidoOracaoDTO> findAll(){
 		UserDetailImplementation user = UserDetailServiceImplementation.getAuthentication();
 		if(user == null) {
 			throw new AuthorizationException("Email não corresponde com o email de login");
 		} else {
-			List<PedidoOracao> pedidos = repo.findAll();
-			List<PedidoOracaoDTO> list_dtos = new ArrayList<>();
 			Usuario usuario = usuarioRepo.findByEmail(user.getUsername());
 			if(usuario == null) {
-				SuperUsuario superUsuario = superUsearioRepo.findByEmail(user.getUsername());
-				if(superUsuario == null) {
+				SuperUsuario superUser = superUsearioRepo.findByEmail(user.getUsername());
+				if(superUser == null) {
 					throw new ObjectNotFoundException("Email não encontrado.");
-				} else {
-					for(int i = 0; i < pedidos.size(); i++) {
-						if(pedidos.get(i).getSuperUsuario().getId() == superUsuario.getId()) {
-							if(pedidos.get(i).getIsAnonimo().equalsIgnoreCase("true")) {
-								PedidoOracaoDTO dto = new PedidoOracaoDTO(pedidos.get(i));
-								dto.setIsAnonimo(pedidos.get(i).getIsAnonimo());
-								list_dtos.add(dto);
-							} else {
-								PedidoOracaoDTO dto = new PedidoOracaoDTO(pedidos.get(i));
-								dto.setNome_autor(pedidos.get(i).getUsuario().getNome());
-								dto.setIsAnonimo(pedidos.get(i).getIsAnonimo());
-								list_dtos.add(dto);
-							}
-							
-						}
-					}
-					return list_dtos;
 				}
-				
-			} else {
-				for(int i = 0; i < pedidos.size(); i++) {
-					if(pedidos.get(i).getUsuario().getId() == usuario.getId()) {
-						if(pedidos.get(i).getIsAnonimo().equalsIgnoreCase("true")) {
-							PedidoOracaoDTO dto = new PedidoOracaoDTO(pedidos.get(i));
-							dto.setIsAnonimo(pedidos.get(i).getIsAnonimo());
-							list_dtos.add(dto);
-						} else {
-							PedidoOracaoDTO dto = new PedidoOracaoDTO(pedidos.get(i));
-							dto.setNome_autor(pedidos.get(i).getUsuario().getNome());
-							dto.setIsAnonimo(pedidos.get(i).getIsAnonimo());
-							list_dtos.add(dto);
-						}
-					}
-				}
-				return list_dtos;
 			}
+			List<PedidoOracaoDTO> dtos = findPedidos();
+			return dtos;
 		}
-		
-		
-		
-		
 	}
 	
 	
+	
+	public List<PedidoOracaoDTO> findPedidosByUsuario(){
+		UserDetailImplementation user = UserDetailServiceImplementation.getAuthentication();
+		if(user == null) {
+			throw new AuthorizationException("Email não corresponde com o email de login");
+		} else {
+			Usuario usuario = usuarioRepo.findByEmail(user.getUsername());
+			if(usuario == null) {
+				throw new ObjectNotFoundException("Email não encontrado.");
+			}
+			List<PedidoOracaoDTO> dtos = findPedidosByUsuarios(usuario);
+			return dtos;
+		}
+	}
+	
+	
+	
+	
+	private List<PedidoOracaoDTO> findPedidos(){
+		List<PedidoOracao> pedidos = repo.findAll();
+		List<PedidoOracaoDTO> dtos = new ArrayList<>();
+		for(PedidoOracao p: pedidos) {
+			PedidoOracaoDTO dto = new PedidoOracaoDTO(p);
+			if(dto.getIsAnonimo().equalsIgnoreCase("true")) {	
+				dto.setNome_autor("Anônimo");
+				dto.getUsuarios().addAll(p.getUsuarios());
+				dtos.add(dto);
+			} else {
+				dto.setNome_autor(p.getUsuario().getNome());
+				dto.getUsuarios().addAll(p.getUsuarios());
+				dtos.add(dto);
+			}
+			
+		}
+		return dtos;
+	}
+	
+	private List<PedidoOracaoDTO> findPedidosByUsuarios(Usuario usuario){
+		List<PedidoOracao> pedidos = repo.findAll();
+		List<PedidoOracaoDTO> dtos = new ArrayList<>();
+		for(PedidoOracao p: pedidos) {
+			if(p.getUsuario().getId() == usuario.getId()) {
+				PedidoOracaoDTO dto = new PedidoOracaoDTO(p);
+				if(dto.getIsAnonimo().equalsIgnoreCase("true")) {	
+					dto.setNome_autor("Anônimo");
+					dtos.add(dto);
+				} else {
+					dto.setNome_autor(p.getUsuario().getNome());
+					dtos.add(dto);
+				}
+			}
+		}
+		return dtos;
+	}
 	
 }

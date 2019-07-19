@@ -1,10 +1,12 @@
 package com.apporacao.dtos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
-
+import java.util.List;
 
 import com.apporacao.model.PedidoOracao;
+import com.apporacao.model.Usuario;
 
 public class PedidoOracaoDTO implements Serializable {
 
@@ -22,6 +24,8 @@ public class PedidoOracaoDTO implements Serializable {
 	
 	private Date data_pedido;
 	
+	private List<Usuario> usuarios = new ArrayList<>();
+	
 	public PedidoOracaoDTO() {}
 	
 	public PedidoOracaoDTO(Long id, String motivoGeral, String motivoPessoal, String motivoDescricao) {
@@ -36,6 +40,7 @@ public class PedidoOracaoDTO implements Serializable {
 		this.motivoGeral = pedido.getMotivoGeral();
 		this.motivoPessoal = pedido.getMotivoPessoal();
 		this.motivoDescricao = pedido.getMotivoDescricao();
+		this.isAnonimo = pedido.getIsAnonimo();
 		this.data_pedido = pedido.getData_pedido();
 	}
 
@@ -94,6 +99,14 @@ public class PedidoOracaoDTO implements Serializable {
 	
 	public void setData_pedido(Date data_pedido) {
 		this.data_pedido = data_pedido;
+	}
+	
+	public List<Usuario> getUsuarios() {
+		return usuarios;
+	}
+	
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
 	}
 	
 
