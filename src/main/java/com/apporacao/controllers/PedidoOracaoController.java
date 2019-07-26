@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,6 +34,12 @@ public class PedidoOracaoController {
 	@RequestMapping(value="/my_pedidos", method = RequestMethod.GET)
 	public ResponseEntity<List<PedidoOracaoDTO>> findPedidosByUsuario(){
 		return ResponseEntity.ok(service.findPedidosByUsuario());
+	}
+	
+	@RequestMapping(value="/pedidos/{id}", method = RequestMethod.PATCH)
+	public ResponseEntity<Void> insertUsuariosIntoPedido(@PathVariable("id") Long id){
+		service.insertUsuariosIntoPedido(id);
+		return ResponseEntity.ok().build();
 	}
 	
 	

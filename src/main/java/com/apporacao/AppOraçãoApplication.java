@@ -47,20 +47,20 @@ public class AppOraçãoApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		
-		SuperUsuario superUsuario = new SuperUsuario(null, "Tal Pastor", "pastor@gmail.com", encoder.encode("123"), 
+		SuperUsuario superUsuario = new SuperUsuario(null, "Tal Pastor", "pastor@gmail.com", encoder.encode("123456"), 
 				"43 99999-7777", "Londrina", "Paraná");
 		superUsuario.setTipo(TipoUsuario.ADMIN);
 		
 		
-		Usuario usuario = new Usuario(null, "Alisson", "kohatsukendi@gmail.com", encoder.encode("123"), 
+		Usuario usuario = new Usuario(null, "Alisson", "kohatsukendi@gmail.com", encoder.encode("123456"), 
 				"Paraná", "Londrina", "43 99999-2222", superUsuario);
 		usuario.setTipo(TipoUsuario.COMUM);
 		
-		Usuario usuario2 = new Usuario(null, "William", "william@gmail.com", encoder.encode("123"), 
+		Usuario usuario2 = new Usuario(null, "William", "william@gmail.com", encoder.encode("123456"), 
 				"Paraná", "Londrina", "43 99999-2222", superUsuario);
 		usuario2.setTipo(TipoUsuario.COMUM);
 		
-		Usuario usuario3 = new Usuario(null, "João", "joao@gmail.com", encoder.encode("123"), 
+		Usuario usuario3 = new Usuario(null, "João", "joao@gmail.com", encoder.encode("123456"), 
 				"Paraná", "Londrina", "43 99999-2222", superUsuario);
 		usuario3.setTipo(TipoUsuario.COMUM);
 		

@@ -86,6 +86,17 @@ public class PedidoOracaoService {
 		}
 	}
 	
+	public void insertUsuariosIntoPedido(Long id) {
+		UserDetailImplementation user = UserDetailServiceImplementation.getAuthentication();
+		if(user == null) {
+			throw new AuthorizationException("Email não corresponde com o email de login");
+		} else {
+			Usuario usuario = usuarioRepo.findByEmail(user.getUsername());
+			PedidoOracao pedido = repo.findById(id).get();
+			pedido.getUsuarios().add(usuario);
+			repo.save(pedido);
+		}
+	}
 	
 	
 	
