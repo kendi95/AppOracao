@@ -15,6 +15,7 @@ import com.apporacao.dtos.DefaultUsuarioDTO;
 import com.apporacao.exceptions.AuthorizationException;
 import com.apporacao.exceptions.EmailReceiverNotEqualException;
 import com.apporacao.exceptions.ObjectNotFoundException;
+import com.apporacao.exceptions.SQLViolationException;
 import com.apporacao.exceptions.TimeExpirationException;
 import com.apporacao.model.SuperUsuario;
 import com.apporacao.model.Usuario;
@@ -50,19 +51,29 @@ public class UsuarioService {
 			if(getRole(dto.getConviteEncrypt()).equalsIgnoreCase(TipoUsuario.COMUM.getTipo())) {
 				if(getEmailReceiver(dto.getConviteEncrypt()).equalsIgnoreCase(dto.getEmail())) {
 					SuperUsuario superUsuario =  superUsuarioRepo.findByEmail(getEmailSender(dto.getConviteEncrypt()));
-					Usuario usuario = new Usuario(null, dto.getNome(), 
-							dto.getEmail(), encoder.encode(dto.getSenha()), dto.getEstado(), dto.getCidade(), dto.getTelefone(), superUsuario);
-					usuario.setTipo(TipoUsuario.COMUM);
-					superUsuario.setUsuarios(Arrays.asList(usuario));
-					repo.save(usuario);
+					Usuario usuario = repo.findByEmail(dto.getEmail());
+					if(usuario == null) {
+						usuario = new Usuario(null, dto.getNome(), 
+								dto.getEmail(), encoder.encode(dto.getSenha()), dto.getEstado(), dto.getCidade(), dto.getTelefone(), superUsuario);
+						usuario.setTipo(TipoUsuario.COMUM);
+						superUsuario.setUsuarios(Arrays.asList(usuario));
+					
+						repo.save(usuario);
+					}
+					throw new SQLViolationException("Não é possível inserir email existente.");
+					
 				}
 				throw new EmailReceiverNotEqualException("O email não corresponde com o email do convite.");
 				
 			} else {
-				SuperUsuario superUsuario = new SuperUsuario(null, dto.getNome(), 
-						dto.getEmail(), encoder.encode(dto.getSenha()), dto.getTelefone(), dto.getCidade(), dto.getEstado());
-				superUsuario.setTipo(TipoUsuario.ADMIN);
-				superUsuarioRepo.save(superUsuario);
+				SuperUsuario superUsuario = superUsuarioRepo.findByEmail(dto.getEmail());
+				if(superUsuario == null) {
+					superUsuario = new SuperUsuario(null, dto.getNome(), 
+							dto.getEmail(), encoder.encode(dto.getSenha()), dto.getTelefone(), dto.getCidade(), dto.getEstado());
+					superUsuario.setTipo(TipoUsuario.ADMIN);
+					superUsuarioRepo.save(superUsuario);
+				}
+				throw new SQLViolationException("Não é possível inserir email existente.");
 			}
 		}
 		
@@ -134,7 +145,6 @@ public class UsuarioService {
 		pbeConfig();
 		String descrypt = encrypt.decrypt(textEcrypt);
 		String[] emailSender = descrypt.split(" ");
-		System.out.println(emailSender[0]);
 		return emailSender[0];
 	}
 	
@@ -142,7 +152,6 @@ public class UsuarioService {
 		pbeConfig();
 		String descrypt = encrypt.decrypt(textEcrypt);
 		String[] emailSender = descrypt.split(" ");
-		System.out.println(emailSender[1]);
 		return emailSender[1];
 	}
 	
@@ -150,7 +159,6 @@ public class UsuarioService {
 		pbeConfig();
 		String descrypt = encrypt.decrypt(textEcrypt);
 		String[] emailSender = descrypt.split(" ");
-		System.out.println(emailSender[2]);
 		return emailSender[2];
 	}
 	
@@ -158,7 +166,6 @@ public class UsuarioService {
 		pbeConfig();
 		String descrypt = encrypt.decrypt(textEcrypt);
 		String[] emailSender = descrypt.split(" ");
-		System.out.println(emailSender[3]);
 		Long expiration = Long.parseLong(emailSender[3]);
 		return expiration;
 	}
