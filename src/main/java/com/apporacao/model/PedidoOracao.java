@@ -32,9 +32,19 @@ public class PedidoOracao implements Serializable {
 		inverseJoinColumns = @JoinColumn(name = "usuario_id"))
 	private List<Usuario> usuarios = new ArrayList<>(); 
 	
+	@ManyToMany
+	@JoinTable(name = "PEDIDO_ORACAO_SUPER_USUARIO",
+		joinColumns = @JoinColumn(name = "pedido_oracao_id"),
+		inverseJoinColumns = @JoinColumn(name = "superUsuario_id"))
+	private List<SuperUsuario> superUsuarios = new ArrayList<>(); 
+	
 	@JsonIgnore
 	@OneToOne
 	private Usuario usuario;
+	
+	@JsonIgnore
+	@OneToOne
+	private SuperUsuario superUsuario;
 	
 	private String motivoGeral;
 	private String motivoPessoal;
@@ -48,9 +58,11 @@ public class PedidoOracao implements Serializable {
 	
 	public PedidoOracao() {}
 	
-	public PedidoOracao(Long id, Usuario usuario, String motivoGeral, String motivoPessoal, String motivoDescricao, String isAnonimo, Date data_pedido) {
+	public PedidoOracao(Long id, Usuario usuario, SuperUsuario superUsuario, String motivoGeral, String motivoPessoal, String motivoDescricao, 
+			String isAnonimo, Date data_pedido) {
 		this.id = id;
 		this.usuario = usuario;
+		this.superUsuario = superUsuario;
 		this.motivoGeral = motivoGeral;
 		this.motivoPessoal = motivoPessoal;
 		this.motivoDescricao = motivoDescricao;
@@ -123,6 +135,23 @@ public class PedidoOracao implements Serializable {
 	public void setUsuarios(List<Usuario> usuarios) {
 		this.usuarios = usuarios;
 	}
+	
+	public List<SuperUsuario> getSuperUsuarios() {
+		return superUsuarios;
+	}
+	
+	public void setSuperUsuarios(List<SuperUsuario> superUsuarios) {
+		this.superUsuarios = superUsuarios;
+	}
+	
+	public SuperUsuario getSuperUsuario() {
+		return superUsuario;
+	}
+	
+	public void setSuperUsuario(SuperUsuario superUsuario) {
+		this.superUsuario = superUsuario;
+	}
+	
 	
 
 	@Override

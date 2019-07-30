@@ -51,6 +51,10 @@ public class AppOraçãoApplication implements CommandLineRunner{
 				"43 99999-7777", "Londrina", "Paraná");
 		superUsuario.setTipo(TipoUsuario.ADMIN);
 		
+		SuperUsuario superUsuario2 = new SuperUsuario(null, "Tal Pastor2", "pastor2@gmail.com", encoder.encode("123456"), 
+				"43 99999-7777", "Londrina", "Paraná");
+		superUsuario2.setTipo(TipoUsuario.ADMIN);
+		
 		
 		Usuario usuario = new Usuario(null, "Alisson", "kohatsukendi@gmail.com", encoder.encode("123456"), 
 				"Paraná", "Londrina", "43 99999-2222", superUsuario);
@@ -61,38 +65,44 @@ public class AppOraçãoApplication implements CommandLineRunner{
 		usuario2.setTipo(TipoUsuario.COMUM);
 		
 		Usuario usuario3 = new Usuario(null, "João", "joao@gmail.com", encoder.encode("123456"), 
-				"Paraná", "Londrina", "43 99999-2222", superUsuario);
+				"Paraná", "Londrina", "43 99999-2222", superUsuario2);
 		usuario3.setTipo(TipoUsuario.COMUM);
 		
 		
 		
-		PedidoOracao pedidoGeral = new PedidoOracao(null, usuario, "Motivo Geral", null, null, "true", 
+		PedidoOracao pedidoGeral = new PedidoOracao(null, usuario, null, "Motivo Geral", null, null, "true", 
 				new Date(System.currentTimeMillis()));
 		pedidoGeral.getUsuarios().addAll(Arrays.asList(usuario2, usuario3));
 		
-		PedidoOracao pedidoGeral2 = new PedidoOracao(null, usuario2, "Motivo Geral", null, null, "false", 
+		PedidoOracao pedidoGeral2 = new PedidoOracao(null, usuario2, null, "Motivo Geral", null, null, "false", 
 				new Date(System.currentTimeMillis()));
 		pedidoGeral2.getUsuarios().addAll(Arrays.asList(usuario, usuario3));
 		
-		PedidoOracao pedidoGeral3 = new PedidoOracao(null, usuario3, "Motivo Geral", null, null, "true", 
+		PedidoOracao pedidoGeral3 = new PedidoOracao(null, usuario3, null, "Motivo Geral", null, null, "true", 
 				new Date(System.currentTimeMillis()));
 		pedidoGeral3.getUsuarios().addAll(Arrays.asList(usuario, usuario2));
 		
-		PedidoOracao pedidoPessoal = new PedidoOracao(null, usuario, null, "Motivo Pessoal", 
+		PedidoOracao pedidoGeral4 = new PedidoOracao(null, null, superUsuario, "Motivo Geral", null, null, "true", 
+				new Date(System.currentTimeMillis()));
+		pedidoGeral4.getUsuarios().addAll(Arrays.asList(usuario, usuario2, usuario3));
+		pedidoGeral4.getSuperUsuarios().addAll(Arrays.asList(superUsuario2));
+		
+		PedidoOracao pedidoPessoal = new PedidoOracao(null, usuario, null, null, "Motivo Pessoal", 
 				"Descricao do motivo Descricao do motivo Descricao do motivo Descricao do motivo Descricao do motivo", "false", 
 				new Date(System.currentTimeMillis()));
 		
-		PedidoOracao pedidoPessoal2 = new PedidoOracao(null, usuario2, null, "Motivo Pessoal", 
+		PedidoOracao pedidoPessoal2 = new PedidoOracao(null, usuario2, null,  null, "Motivo Pessoal", 
 				"Descricao do motivo Descricao do motivo Descricao do motivo Descricao do motivo Descricao do motivo", "true", 
 				new Date(System.currentTimeMillis()));
 		
-		PedidoOracao pedidoPessoal3 = new PedidoOracao(null, usuario3, null, "Motivo Pessoal", 
+		PedidoOracao pedidoPessoal3 = new PedidoOracao(null, usuario3, null,  null, "Motivo Pessoal", 
 				"Descricao do motivo Descricao do motivo Descricao do motivo Descricao do motivo Descricao do motivo", "false", 
 				new Date(System.currentTimeMillis()));
 		
-		usuario.getPedidos().addAll(Arrays.asList(pedidoGeral, pedidoPessoal));
-		usuario2.getPedidos().addAll(Arrays.asList(pedidoGeral2, pedidoPessoal2));
-		usuario3.getPedidos().addAll(Arrays.asList(pedidoGeral3, pedidoPessoal3));
+//		superUsuario.getPedidos().addAll(Arrays.asList(pedidoGeral4));
+//		usuario.getPedidos().addAll(Arrays.asList(pedidoGeral, pedidoPessoal));
+//		usuario2.getPedidos().addAll(Arrays.asList(pedidoPessoal2));
+//		usuario3.getPedidos().addAll(Arrays.asList(pedidoGeral3, pedidoPessoal3));
 		
 		
 		MotivoGeral mGeral = new MotivoGeral(null, "familia");
@@ -105,9 +115,9 @@ public class AppOraçãoApplication implements CommandLineRunner{
 		mGeral.setmGDescricao(Arrays.asList(mGDescricao));
 		mGeral2.setmGDescricao(Arrays.asList(mGDescricao2));
 		
-		superUsuarioRepo.save(superUsuario);
+		superUsuarioRepo.saveAll(Arrays.asList(superUsuario, superUsuario2));
 		repo.saveAll(Arrays.asList(usuario, usuario2, usuario3));
-		pedidoRepo.saveAll(Arrays.asList(pedidoGeral, pedidoGeral2, pedidoGeral3, pedidoPessoal, pedidoPessoal2, pedidoPessoal3));
+		pedidoRepo.saveAll(Arrays.asList(pedidoGeral, pedidoGeral2, pedidoGeral3, pedidoGeral4, pedidoPessoal, pedidoPessoal2, pedidoPessoal3));
 		motivoGeralRepo.saveAll(Arrays.asList(mGeral, mGeral2));
 		mGDescricaoRepo.saveAll(Arrays.asList(mGDescricao, mGDescricao2));
 	}

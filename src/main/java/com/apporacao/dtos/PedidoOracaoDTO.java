@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.apporacao.model.PedidoOracao;
+import com.apporacao.model.SuperUsuario;
 import com.apporacao.model.Usuario;
 
 public class PedidoOracaoDTO implements Serializable {
@@ -25,6 +26,7 @@ public class PedidoOracaoDTO implements Serializable {
 	private Date data_pedido;
 	
 	private List<Usuario> usuarios = new ArrayList<>();
+	private List<SuperUsuario> superUsuarios = new ArrayList<>();
 	
 	public PedidoOracaoDTO() {}
 	
@@ -42,6 +44,8 @@ public class PedidoOracaoDTO implements Serializable {
 		this.motivoDescricao = pedido.getMotivoDescricao();
 		this.isAnonimo = pedido.getIsAnonimo();
 		this.data_pedido = pedido.getData_pedido();
+		this.usuarios = pedido.getUsuarios();
+		this.superUsuarios = pedido.getSuperUsuarios();
 	}
 
 	public Long getId() {
@@ -109,5 +113,12 @@ public class PedidoOracaoDTO implements Serializable {
 		this.usuarios = usuarios;
 	}
 	
+	public List<SuperUsuario> getSuperUsuarios() {
+		return superUsuarios;
+	}
+	
+	public void setSuperUsuarios(List<SuperUsuario> superUsuarios) {
+		this.superUsuarios = superUsuarios;
+	}
 
 }

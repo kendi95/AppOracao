@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import com.apporacao.model.enums.TipoUsuario;
@@ -33,6 +34,10 @@ public class SuperUsuario implements Serializable {
 	
 	@OneToMany(mappedBy = "superUsuario", cascade = CascadeType.ALL)
 	private List<Usuario> usuarios = new ArrayList<>();
+	
+	@JsonIgnore
+	@ManyToMany(mappedBy = "usuario")
+	private List<PedidoOracao> pedidos = new ArrayList<>();
 	
 	private TipoUsuario tipo;
 	
@@ -123,6 +128,14 @@ public class SuperUsuario implements Serializable {
 	
 	public void setTipo(TipoUsuario tipo) {
 		this.tipo = tipo;
+	}
+	
+	public List<PedidoOracao> getPedidos() {
+		return pedidos;
+	}
+	
+	public void setPedidos(List<PedidoOracao> pedidos) {
+		this.pedidos = pedidos;
 	}
 	
 	

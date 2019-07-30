@@ -42,5 +42,11 @@ public class PedidoOracaoController {
 		return ResponseEntity.ok().build();
 	}
 	
+	@RequestMapping(value="/pedidos/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> delete(@PathVariable("id") Long id){
+		service.delete(id);
+		return ResponseEntity.ok().build();
+	}
+	
 	
 }
