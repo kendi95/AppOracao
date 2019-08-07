@@ -14,6 +14,7 @@ import com.apporacao.exceptions.EmailReceiverNotEqualException;
 import com.apporacao.exceptions.ObjectNotFoundException;
 import com.apporacao.exceptions.SQLViolationException;
 import com.apporacao.exceptions.TimeExpirationException;
+import com.apporacao.exceptions.UserEqualsPedidoUserException;
 import com.apporacao.exceptions.UsernameNotFoundException;
 
 @ControllerAdvice
@@ -87,6 +88,15 @@ public class ControllerExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standardError);
 	}
 	
-	
+	@ExceptionHandler(UserEqualsPedidoUserException.class)
+	public ResponseEntity<StandardError> userEqualsPedidoUser(UserEqualsPedidoUserException e, HttpServletRequest request){
+		standardError = new StandardError(
+				new Date(System.currentTimeMillis()), 
+				HttpStatus.BAD_REQUEST.value(), 
+				"Erro de requisição.", 
+				e.getMessage(), 
+				request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standardError);
+	}
 	
 }

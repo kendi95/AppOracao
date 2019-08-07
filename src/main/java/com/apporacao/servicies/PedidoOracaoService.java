@@ -3,6 +3,7 @@ package com.apporacao.servicies;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.apporacao.dtos.PedidoOracaoDTO;
 import com.apporacao.exceptions.AuthorizationException;
 import com.apporacao.exceptions.ObjectNotFoundException;
+import com.apporacao.exceptions.UserEqualsPedidoUserException;
 import com.apporacao.model.PedidoOracao;
 import com.apporacao.model.SuperUsuario;
 import com.apporacao.model.Usuario;
@@ -113,14 +115,32 @@ public class PedidoOracaoService {
 				if(superUsuario == null) {
 					throw new ObjectNotFoundException("Email não encontrado.");
 				} else {
-					PedidoOracao pedido = repo.findById(id).get();
-					pedido.getSuperUsuarios().add(superUsuario);
-					repo.save(pedido);
+					Optional<PedidoOracao> pedido = repo.findById(id);
+					if(pedido.get().getSuperUsuario() == null) {
+						pedido.get().getSuperUsuarios().add(superUsuario);
+						repo.save(pedido.get());
+					} else {
+						if(pedido.get().getSuperUsuario().getId() == superUsuario.getId()) {
+							throw new UserEqualsPedidoUserException("Usuário é o mesmo assóciado com o pedido.");
+						} else {
+							pedido.get().getSuperUsuarios().add(superUsuario);
+							repo.save(pedido.get());
+						}
+					}
 				}
 			} else {
-				PedidoOracao pedido = repo.findById(id).get();
-				pedido.getUsuarios().add(usuario);
-				repo.save(pedido);
+				Optional<PedidoOracao> pedido = repo.findById(id);
+				if(pedido.get().getUsuario() == null) {
+					pedido.get().getUsuarios().add(usuario);
+					repo.save(pedido.get());
+				} else {
+					if(pedido.get().getUsuario().getId() == usuario.getId()) {
+						throw new UserEqualsPedidoUserException("Usuário é o mesmo assóciado com o pedido.");
+					} else {
+						pedido.get().getUsuarios().add(usuario);
+						repo.save(pedido.get());
+					}
+				}
 			}
 		}
 	}

@@ -2,8 +2,10 @@ package com.apporacao;
 
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -88,7 +90,7 @@ public class AppOraçãoApplication implements CommandLineRunner{
 		pedidoGeral4.getSuperUsuarios().addAll(Arrays.asList(superUsuario2));
 		
 		PedidoOracao pedidoPessoal = new PedidoOracao(null, usuario, null, null, "Motivo Pessoal", 
-				"Descricao do motivo Descricao do motivo Descricao do motivo Descricao do motivo Descricao do motivo", "false", 
+				"Descricao do motivo Descricao do motivo Descricao do motivo Descricao do motivo Descricao do motivo Descricao do motivo Descricao do motivo", "false", 
 				new Date(System.currentTimeMillis()));
 		
 		PedidoOracao pedidoPessoal2 = new PedidoOracao(null, usuario2, null,  null, "Motivo Pessoal", 
@@ -120,6 +122,18 @@ public class AppOraçãoApplication implements CommandLineRunner{
 		pedidoRepo.saveAll(Arrays.asList(pedidoGeral, pedidoGeral2, pedidoGeral3, pedidoGeral4, pedidoPessoal, pedidoPessoal2, pedidoPessoal3));
 		motivoGeralRepo.saveAll(Arrays.asList(mGeral, mGeral2));
 		mGDescricaoRepo.saveAll(Arrays.asList(mGDescricao, mGDescricao2));
+		
+		List<String> nomes = new ArrayList<>();
+		nomes.addAll(Arrays.asList("Alisson", "William", "Emilia"));
+		
+		for(String nome: nomes) {
+			if(nome == "Alisson") {
+				System.out.println("Aprovado");
+			} else {
+				System.out.println("Reprovado");
+			}
+			
+		}
 	}
 
 }

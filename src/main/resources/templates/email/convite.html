@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title th:remove="all">Convite</title> 
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+</head>
+
+<body>
+
+	<div>
+		<div>
+			<h3>Detalhes</h3>
+	   			<p>Remetente: <span th:text="${remetente}"></span></p>
+				<p>Destinatário: <span th:text="${destino}"></span></p>
+		</div>
+		
+		<div>
+			<h3>Convite</h3>
+			<p><span th:text="${convite}"></span></p> 
+		</div>
+	</div> 
+
+</body>
+
+</html>

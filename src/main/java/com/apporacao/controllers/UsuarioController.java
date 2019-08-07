@@ -1,5 +1,7 @@
 package com.apporacao.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +40,11 @@ public class UsuarioController {
 	@RequestMapping(value = "/usuario", method = RequestMethod.PUT)
 	public ResponseEntity<DefaultUsuarioDTO> update(@RequestBody DefaultUsuarioDTO dto){
 		return ResponseEntity.ok(service.update(dto));
+	}
+	
+	@RequestMapping(value = "/usuarios", method = RequestMethod.GET)
+	public ResponseEntity<List<DefaultUsuarioDTO>> findAll(){
+		return ResponseEntity.ok(service.findAll());
 	}
 	
 

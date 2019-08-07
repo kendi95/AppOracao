@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,13 +17,17 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.apporacao.dtos.CredencialDTO;
+import com.apporacao.repositories.UsuarioRepositorio;
 import com.apporacao.security.UserDetailImplementation;
 import com.apporacao.security.filters.handlers.JWTAuthenticationFailureHandler;
 import com.apporacao.security.utils.JWTUtil;
+import com.apporacao.servicies.UsuarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 	
+	@Autowired
+	private UsuarioRepositorio repo;
 	
 	private AuthenticationManager authenticationManager;
 	private JWTUtil jwtUtil;
@@ -59,7 +64,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 		String tipo = getAuthorities(authResult);
 		System.out.println(tipo);
 		response.setContentType("application/json");
-		response.getOutputStream().print(responseJson(name, tipo));
+		response.setCharacterEncoding("utf-8");
+		response.getWriter().write(responseJson(name, tipo));
 		response.addHeader("Authorization", "Bearer "+token);
 		response.addHeader("access-control-expose-headers", "Authorization");
 	}

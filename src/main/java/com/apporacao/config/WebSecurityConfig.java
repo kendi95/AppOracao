@@ -36,7 +36,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	};
 	
 	private static final String[] publicMatchersGet = {
-		"/auth/verify_email/**"
+		"/auth/verify_email/**",
+		"/api/usuarios"
 	};
 	
 	private static final String[] publicMatchersPacth = {

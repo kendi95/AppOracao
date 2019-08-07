@@ -71,9 +71,8 @@ public class AuthService {
 			pbeConfig();
 			long timeExpiration = new Date(System.currentTimeMillis()+300000).getTime();
 			String criptografado = encrypt.encrypt(email+" "+timeExpiration);
-			emailServiceImpl.sendCustomMessage("kohatsukendi@gmail.com", email, "Código de segurança", "Código: "+criptografado);
+			emailServiceImpl.sendEmailNewPassword("kohatsukendi@gmail.com", email, "Código de segurança", criptografado);
 		} catch (SocketTimeoutException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

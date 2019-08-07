@@ -39,13 +39,13 @@ public class PedidoOracaoController {
 	@RequestMapping(value="/pedidos/{id}", method = RequestMethod.PATCH)
 	public ResponseEntity<Void> insertUsuariosIntoPedido(@PathVariable("id") Long id){
 		service.insertUsuariosIntoPedido(id);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.noContent().build();
 	}
 	
 	@RequestMapping(value="/pedidos/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable("id") Long id){
 		service.delete(id);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.noContent().build();
 	}
 	
 	
