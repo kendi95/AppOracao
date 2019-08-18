@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.apporacao.exceptions.AuthorizationException;
 import com.apporacao.exceptions.EmailReceiverNotEqualException;
+import com.apporacao.exceptions.EmailSenderNotEqualException;
 import com.apporacao.exceptions.ObjectNotFoundException;
 import com.apporacao.exceptions.SQLViolationException;
 import com.apporacao.exceptions.TimeExpirationException;
@@ -98,5 +99,19 @@ public class ControllerExceptionHandler {
 				request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standardError);
 	}
+	
+	@ExceptionHandler(EmailSenderNotEqualException.class)
+	public ResponseEntity<StandardError> emailSenderNotEqualed(EmailSenderNotEqualException e, HttpServletRequest request){
+		standardError = new StandardError(
+				new Date(System.currentTimeMillis()), 
+				HttpStatus.BAD_REQUEST.value(), 
+				"Erro de requisição.", 
+				e.getMessage(), 
+				request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standardError);
+	}
+	
+	
+	
 	
 }

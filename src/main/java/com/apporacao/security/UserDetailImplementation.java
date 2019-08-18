@@ -9,7 +9,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.apporacao.model.SuperUsuario;
 import com.apporacao.model.Usuario;
 import com.apporacao.model.enums.TipoUsuario;
 
@@ -41,15 +40,6 @@ public class UserDetailImplementation implements UserDetails {
 		this.password = usuario.getSenha();
 		this.authority = tipos.stream().map(x -> new SimpleGrantedAuthority(x.getTipo())).collect(Collectors.toList());
 		
-	}
-	
-	public UserDetailImplementation(SuperUsuario superUsuario) {
-		tipos.add(superUsuario.getTipo());
-		this.id = superUsuario.getId();
-		this.name = superUsuario.getNome();
-		this.username = superUsuario.getEmail();
-		this.password = superUsuario.getSenha();
-		this.authority = tipos.stream().map(x -> new SimpleGrantedAuthority(x.getTipo())).collect(Collectors.toList());
 	}
 	
 	

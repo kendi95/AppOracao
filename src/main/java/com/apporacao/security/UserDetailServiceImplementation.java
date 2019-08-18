@@ -7,9 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.apporacao.model.SuperUsuario;
 import com.apporacao.model.Usuario;
-import com.apporacao.repositories.SuperUsuarioRepositorio;
 import com.apporacao.repositories.UsuarioRepositorio;
 
 @Service
@@ -17,8 +15,7 @@ public class UserDetailServiceImplementation implements UserDetailsService {
 
 	@Autowired
 	private UsuarioRepositorio repo;
-	@Autowired
-	private SuperUsuarioRepositorio superUsuarioRe;
+
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -26,12 +23,7 @@ public class UserDetailServiceImplementation implements UserDetailsService {
 		if(usuario != null) {
 			return new UserDetailImplementation(usuario);
 		} else {
-			SuperUsuario superUsuario = superUsuarioRe.findByEmail(username);
-			if(superUsuario != null) {
-				return new UserDetailImplementation(superUsuario);
-			}
 			throw new UsernameNotFoundException("Nao encontrado.");
-			
 		}
 		
 	}

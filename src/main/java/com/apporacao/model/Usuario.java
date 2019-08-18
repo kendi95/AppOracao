@@ -9,8 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 
 import com.apporacao.model.enums.TipoUsuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,14 +34,11 @@ public class Usuario implements Serializable {
 	
 	private String telefone;
 	
-	@JsonIgnore
-	@OneToOne
-	private SuperUsuario superUsuario;
-	
 	private TipoUsuario tipo;
+
 	
 	@JsonIgnore
-	@ManyToMany(mappedBy = "usuario")
+	@OneToMany(mappedBy = "usuario")
 	private List<PedidoOracao> pedidos = new ArrayList<>();
 	
 	
@@ -52,7 +48,7 @@ public class Usuario implements Serializable {
 	}
 
 
-	public Usuario(Long id, String nome, String email, String senha, String estado, String cidade, String telefone, SuperUsuario superusuario) {
+	public Usuario(Long id, String nome, String email, String senha, String estado, String cidade, String telefone) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -61,7 +57,6 @@ public class Usuario implements Serializable {
 		this.estado = estado;
 		this.cidade = cidade;
 		this.telefone = telefone;
-		this.superUsuario = superusuario;
 	}
 
 
@@ -134,14 +129,6 @@ public class Usuario implements Serializable {
 		this.telefone = telefone;
 	}
 
-	public SuperUsuario getSuperUsuario() {
-		return superUsuario;
-	}
-	
-	public void setSuperUsuario(SuperUsuario superUsuario) {
-		this.superUsuario = superUsuario;
-	}
-	
 	public TipoUsuario getTipo() {
 		return tipo;
 	}

@@ -25,7 +25,7 @@ public class MotivosService {
 		return repo.findAll();
 	}
 	
-	//revisar
+
 	public List<MotivoGeralDescricaoDTO> findByDescricao(String descricao){
 		UserDetailImplementation user = UserDetailServiceImplementation.getAuthentication();
 		if(user == null) {

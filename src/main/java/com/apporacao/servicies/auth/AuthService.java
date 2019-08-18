@@ -13,9 +13,7 @@ import org.springframework.stereotype.Service;
 import com.apporacao.dtos.SenhaDTO;
 import com.apporacao.exceptions.ObjectNotFoundException;
 import com.apporacao.exceptions.TimeExpirationException;
-import com.apporacao.model.SuperUsuario;
 import com.apporacao.model.Usuario;
-import com.apporacao.repositories.SuperUsuarioRepositorio;
 import com.apporacao.repositories.UsuarioRepositorio;
 import com.apporacao.servicies.EmailServiceImpl;
 
@@ -25,41 +23,41 @@ public class AuthService {
 	@Autowired
 	private UsuarioRepositorio repo;
 	@Autowired
-	private SuperUsuarioRepositorio superUsuarioRepo;
-	@Autowired
 	private EmailServiceImpl emailServiceImpl;
 	@Autowired
 	private BCryptPasswordEncoder encoder;
 	private StandardPBEStringEncryptor encrypt;
 	
+	private String email;
+	private long expiration;
+	
 	
 	public void confirmEmail(String email) {
 		Usuario usuario = repo.findByEmail(email);
 		if(usuario == null) {
-			SuperUsuario superUser = superUsuarioRepo.findByEmail(email);
-			if(superUser == null) {
-				throw new ObjectNotFoundException("Email não encontrado.");
-			}
-			createCodeSecurity(superUser.getEmail());
+			throw new ObjectNotFoundException("Email não encontrado.");
+		} else {
+			createCodeSecurity(usuario.getEmail());
 		}
-		createCodeSecurity(usuario.getEmail());
 	}
 	
 	public void newPassword(SenhaDTO dto) {
-		if(getExpiration(dto.getCodeSecurity()) < new Date(System.currentTimeMillis()).getTime()) {
-			throw new TimeExpirationException("O tempo do código de segurança foi expirado.");
-		}
-		Usuario usuario = repo.findByEmail(getEmail(dto.getCodeSecurity()));
-		if(usuario == null) {
-			SuperUsuario superUser = superUsuarioRepo.findByEmail(getEmail(dto.getCodeSecurity()));
-			if(superUser == null) {
-				throw new ObjectNotFoundException("Email não encontrado.");
+		if(dto.getCodeSecurity() == null) {
+			throw new EncryptionOperationNotPossibleException("Não há código de segurança inserido.");
+		} else {
+			getValuesEncrypts(dto.getCodeSecurity());
+			if(expiration < new Date(System.currentTimeMillis()).getTime()) {
+				throw new TimeExpirationException("O tempo do código de segurança foi expirado.");
 			}
-			superUser.setSenha(encoder.encode(dto.getSenha()));
-			superUsuarioRepo.save(superUser);
+			Usuario usuario = repo.findByEmail(email);
+			if(usuario == null) {
+				throw new ObjectNotFoundException("Email não encontrado.");
+			} else {
+				usuario.setSenha(encoder.encode(dto.getSenha()));
+				repo.save(usuario);
+			}
 		}
-		usuario.setSenha(encoder.encode(dto.getSenha()));
-		repo.save(usuario);
+		
 	}
 	
 	
@@ -77,30 +75,13 @@ public class AuthService {
 		}
 	}
 	
-	
-	
-	private String getEmail(String textEcrypt) {
-		if(textEcrypt == null) {
-			throw new EncryptionOperationNotPossibleException("Valor do código de segurança não pode ser nulo: "+textEcrypt);
-		}
+	private void getValuesEncrypts(String textEncrypt) {
 		pbeConfig();
-		String descrypt = encrypt.decrypt(textEcrypt);
-		String[] emailSender = descrypt.split(" ");
-		return emailSender[0];
+		String descrypt = encrypt.decrypt(textEncrypt);
+		String[] textDecrypt = descrypt.split(" ");
+		this.email = textDecrypt[0];
+		this.expiration = Long.parseLong(textDecrypt[1]);
 	}
-	
-	private long getExpiration(String textEcrypt) {
-		if(textEcrypt == null) {
-			throw new EncryptionOperationNotPossibleException("Valor do código de segurança não pode ser nulo: "+textEcrypt);
-		}
-		pbeConfig();
-		String descrypt = encrypt.decrypt(textEcrypt);
-		String[] emailSender = descrypt.split(" ");
-		Long expiration = Long.parseLong(emailSender[1]);
-		return expiration;
-	}
-	
-	
 	
 	private void pbeConfig() {
 		encrypt = new StandardPBEStringEncryptor();

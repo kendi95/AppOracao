@@ -20,7 +20,7 @@ public class JWTAuthenticationFailureHandler implements AuthenticationFailureHan
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
-		response.setStatus(response.SC_FORBIDDEN);
+		response.setStatus(HttpStatus.FORBIDDEN.value());
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		response.getOutputStream().print(errorAsJson());
 	}

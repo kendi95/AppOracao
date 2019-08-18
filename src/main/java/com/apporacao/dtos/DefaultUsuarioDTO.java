@@ -2,7 +2,6 @@ package com.apporacao.dtos;
 
 import java.io.Serializable;
 
-import com.apporacao.model.SuperUsuario;
 import com.apporacao.model.Usuario;
 
 public class DefaultUsuarioDTO implements Serializable {
@@ -49,14 +48,6 @@ public class DefaultUsuarioDTO implements Serializable {
 		this.estado = usuario.getEstado();
 	}
 	
-	public DefaultUsuarioDTO(SuperUsuario superUser) {
-		this.id = superUser.getId();
-		this.nome = superUser.getNome();
-		this.email = superUser.getEmail();
-		this.telefone = superUser.getTelefone();
-		this.cidade = superUser.getCidade();
-		this.estado = superUser.getEstado();
-	}
 
 
 	public Long getId() {
