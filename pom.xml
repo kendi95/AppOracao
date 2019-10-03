@@ -13,7 +13,7 @@
 	<version>0.0.4</version>
 	<name>AppOracao</name>
 	<description>Aplicação de oração</description>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<properties>
     	<java-version>1.8</java-version>
