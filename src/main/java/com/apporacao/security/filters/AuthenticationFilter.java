@@ -16,6 +16,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.apporacao.dtos.CredencialDTO;
+import com.apporacao.model.enums.TipoUsuario;
 import com.apporacao.security.UserDetailImplementation;
 import com.apporacao.security.filters.handlers.JWTAuthenticationFailureHandler;
 import com.apporacao.security.utils.JWTUtil;
@@ -56,10 +57,16 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 		String name = ((UserDetailImplementation) authResult.getPrincipal()).getName();
 		String token = jwtUtil.createToken(email);
 		String tipo = getAuthorities(authResult);
-		System.out.println(tipo);
+		String imageURL = ((UserDetailImplementation) authResult.getPrincipal()).getImageURL();
+		
+		if(tipo == TipoUsuario.ADMIN.getTipo()) {
+			response.getWriter().write(responseJson(name, true, email, null));
+		} else {
+			response.getWriter().write(responseJson(name, false, email, null));
+		}
+		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("utf-8");
-		response.getWriter().write(responseJson(name, tipo));
 		response.addHeader("Authorization", "Bearer "+token);
 		response.addHeader("access-control-expose-headers", "Authorization");
 	}
@@ -74,9 +81,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 	}
 	
 	
-	private String responseJson(String name, String tipo) {
+	private String responseJson(String name, boolean isAdmin, String email, String imageURL) {
 		return "{\"nome\": \""+name+"\"," +
-				"\"tipo\": \""+tipo+"\"}";
+				"\"email\": \""+email+"\"," +
+				"\"imageURL\": \""+imageURL+"\"," +
+				"\"isAdmin\": "+isAdmin+"}";
 	}
 	
 

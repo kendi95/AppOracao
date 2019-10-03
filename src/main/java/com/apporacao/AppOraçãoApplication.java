@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.apporacao.model.MotivoGeral;
@@ -24,7 +25,7 @@ import com.apporacao.repositories.PedidoOracaoRepositorio;
 import com.apporacao.repositories.UsuarioRepositorio;
 
 @SpringBootApplication
-public class AppOraçãoApplication implements CommandLineRunner{
+public class AppOraçãoApplication extends SpringBootServletInitializer implements CommandLineRunner {
 
 	@Autowired
 	private UsuarioRepositorio repo;
@@ -45,12 +46,13 @@ public class AppOraçãoApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {	
 		
-		Usuario usuario = new Usuario(null, "Tal Pastor", "pastor@gmail.com", encoder.encode("123456"), "Paraná", "Londrina", "43 996961515");
+		Usuario usuario = new Usuario(null, "Tal Pastor", "pastor@gmail.com", encoder.encode("123456"), "Paraná", "Londrina", 
+				"43 996961515", null);
 		usuario.setTipo(TipoUsuario.ADMIN);
 		
-//		Usuario usuario = new Usuario(null, "Alisson", "kohatsukendi@gmail.com", encoder.encode("123456"), 
-//				"Paraná", "Londrina", "43 99999-2222");
-//		usuario.setTipo(TipoUsuario.COMUM);
+		Usuario usuario2 = new Usuario(null, "Alisson", "kohatsukendi@gmail.com", encoder.encode("123456"), 
+				"Paraná", "Londrina", "43 99999-2222", null);
+		usuario2.setTipo(TipoUsuario.COMUM);
 //		
 //		Usuario usuario2 = new Usuario(null, "William", "william@gmail.com", encoder.encode("123456"), 
 //				"Paraná", "Londrina", "43 99999-2222");
@@ -62,7 +64,7 @@ public class AppOraçãoApplication implements CommandLineRunner{
 		
 		
 		
-		PedidoOracao pedidoGeral = new PedidoOracao(null, usuario, "Motivo Geral", null, null, "true", 
+		PedidoOracao pedidoGeral = new PedidoOracao(null, usuario, "Motivo Geral", null, null, true, 
 				new Date(System.currentTimeMillis()));
 //		pedidoGeral.getUsuarios().addAll(Arrays.asList(usuario2, usuario3));
 //		
@@ -92,20 +94,20 @@ public class AppOraçãoApplication implements CommandLineRunner{
 //				new Date(System.currentTimeMillis()));
 //		
 //		
-		MotivoGeral mGeral = new MotivoGeral(null, "familia");
-		MotivoGeral mGeral2 = new MotivoGeral(null, "trabalho");
-		
-		
-		MotivoGeralDescricao mGDescricao = new MotivoGeralDescricao(null, "Problema na família", mGeral);
-		MotivoGeralDescricao mGDescricao2 = new MotivoGeralDescricao(null, "Problema no trabalho", mGeral2);
+//		MotivoGeral mGeral = new MotivoGeral(null, "familia");
+//		MotivoGeral mGeral2 = new MotivoGeral(null, "trabalho");
+//		
+//		
+//		MotivoGeralDescricao mGDescricao = new MotivoGeralDescricao(null, "Problema na família", mGeral);
+//		MotivoGeralDescricao mGDescricao2 = new MotivoGeralDescricao(null, "Problema no trabalho", mGeral2);
 		
 //		mGeral.setmGDescricao(Arrays.asList(mGDescricao));
 //		mGeral2.setmGDescricao(Arrays.asList(mGDescricao2));
 		
-		repo.saveAll(Arrays.asList(usuario));
+		repo.saveAll(Arrays.asList(usuario, usuario2));
 		pedidoRepo.saveAll(Arrays.asList(pedidoGeral));
-		motivoGeralRepo.saveAll(Arrays.asList(mGeral, mGeral2));
-		mGDescricaoRepo.saveAll(Arrays.asList(mGDescricao, mGDescricao2));
+//		motivoGeralRepo.saveAll(Arrays.asList(mGeral, mGeral2));
+//		mGDescricaoRepo.saveAll(Arrays.asList(mGDescricao, mGDescricao2));
 		
 	}
 

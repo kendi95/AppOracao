@@ -70,7 +70,7 @@ public class UsuarioService {
 		Usuario usuario = repo.findByEmail(dto.getEmail());
 		if(usuario == null) {
 			usuario = new Usuario(null, dto.getNome(), dto.getEmail(), encoder.encode(dto.getSenha()), 
-					dto.getEstado(), dto.getCidade(), dto.getTelefone());
+					dto.getEstado(), dto.getCidade(), dto.getTelefone(), null);
 			usuario.setTipo(TipoUsuario.COMUM);
 			repo.save(usuario);
 		} else {
@@ -82,7 +82,7 @@ public class UsuarioService {
 		Usuario usuario = repo.findByEmail(dto.getEmail());
 		if(usuario == null) {
 			usuario = new Usuario(null, dto.getNome(), dto.getEmail(), encoder.encode(dto.getSenha()), 
-					dto.getEstado(), dto.getCidade(), dto.getTelefone());
+					dto.getEstado(), dto.getCidade(), dto.getTelefone(), null);
 			usuario.setTipo(TipoUsuario.ADMIN);
 			repo.save(usuario);
 		} else {
@@ -123,8 +123,8 @@ public class UsuarioService {
 	
 	private void pbeConfig() {
 		encrypt = new StandardPBEStringEncryptor();
-		encrypt.setAlgorithm("");
-		encrypt.setPassword("");
+		encrypt.setAlgorithm("PBEWithHMACSHA512AndAES_256");
+		encrypt.setPassword("MessageEcryptByCurch");
 		encrypt.setIvGenerator(new RandomIvGenerator());
 	}
 	
@@ -156,6 +156,21 @@ public class UsuarioService {
 				usuario.setTelefone(dto.getTelefone());
 				usuario.setCidade(dto.getCidade());
 				usuario.setEstado(dto.getEstado());
+				return new DefaultUsuarioDTO(repo.save(usuario));
+			}
+		}
+	}
+	
+	public DefaultUsuarioDTO updateImage(DefaultUsuarioDTO dto) {
+		UserDetailImplementation user = UserDetailServiceImplementation.getAuthentication();
+		if(user == null) {
+			throw new AuthorizationException("Email não corresponde com o email de login");
+		} else {
+			Usuario usuario = repo.findByEmail(user.getUsername());
+			if(usuario == null) {
+				throw new ObjectNotFoundException("Email não encontrado.");
+			} else {
+				usuario.setImageURL(dto.getImageURL());
 				return new DefaultUsuarioDTO(repo.save(usuario));
 			}
 		}

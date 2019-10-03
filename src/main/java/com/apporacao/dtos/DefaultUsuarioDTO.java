@@ -20,6 +20,8 @@ public class DefaultUsuarioDTO implements Serializable {
 	
 	private String conviteEncrypt;
 	
+	private String imageURL;
+	
 
 	
 	public DefaultUsuarioDTO() {
@@ -27,7 +29,7 @@ public class DefaultUsuarioDTO implements Serializable {
 	}
 
 
-	public DefaultUsuarioDTO(Long id, String nome, String email, String senha, String estado, String cidade, String telefone) {
+	public DefaultUsuarioDTO(Long id, String nome, String email, String senha, String estado, String cidade, String telefone, String imageURL) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -36,6 +38,7 @@ public class DefaultUsuarioDTO implements Serializable {
 		this.estado = estado;
 		this.cidade = cidade;
 		this.telefone = telefone;
+		this.imageURL = imageURL;
 	}
 	
 	
@@ -46,6 +49,7 @@ public class DefaultUsuarioDTO implements Serializable {
 		this.telefone = usuario.getTelefone();
 		this.cidade = usuario.getCidade();
 		this.estado = usuario.getEstado();
+		this.imageURL = usuario.getImageURL();
 	}
 	
 
@@ -123,5 +127,16 @@ public class DefaultUsuarioDTO implements Serializable {
 		return conviteEncrypt;
 	}
 	
+	public void setConviteEncrypt(String conviteEncrypt) {
+		this.conviteEncrypt = conviteEncrypt;
+	}
+	
+	public String getImageURL() {
+		return imageURL;
+	}
+	
+	public void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
+	}
 	
 }

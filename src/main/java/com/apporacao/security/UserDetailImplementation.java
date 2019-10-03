@@ -22,14 +22,16 @@ public class UserDetailImplementation implements UserDetails {
 	private String password;
 	private Collection<? extends GrantedAuthority> authority;
 	private List<TipoUsuario> tipos = new ArrayList<>();
+	private String imageURL;
 	
 	
-	public UserDetailImplementation(Long id, String username, String name, String password) {
+	public UserDetailImplementation(Long id, String username, String name, String password, String imageURL) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.username = username;
 		this.password = password;
+		this.imageURL = imageURL;
 	}
 	
 	public UserDetailImplementation(Usuario usuario) {
@@ -39,6 +41,11 @@ public class UserDetailImplementation implements UserDetails {
 		this.username = usuario.getEmail();
 		this.password = usuario.getSenha();
 		this.authority = tipos.stream().map(x -> new SimpleGrantedAuthority(x.getTipo())).collect(Collectors.toList());
+		if(usuario.getImageURL() == null) {
+			this.imageURL = null;
+		} else {
+			this.imageURL = usuario.getImageURL();
+		}
 		
 	}
 	
@@ -50,6 +57,10 @@ public class UserDetailImplementation implements UserDetails {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public String getImageURL() {
+		return imageURL;
 	}
 	
 

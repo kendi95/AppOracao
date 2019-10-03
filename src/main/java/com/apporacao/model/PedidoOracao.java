@@ -42,7 +42,7 @@ public class PedidoOracao implements Serializable {
 	private String motivoPessoal;
 	private String motivoDescricao;
 	
-	private String isAnonimo;
+	private boolean isAnonimo;
 	
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private Date data_pedido;
@@ -51,7 +51,7 @@ public class PedidoOracao implements Serializable {
 	public PedidoOracao() {}
 	
 	public PedidoOracao(Long id, Usuario usuario, String motivoGeral, String motivoPessoal, String motivoDescricao, 
-			String isAnonimo, Date data_pedido) {
+			boolean isAnonimo, Date data_pedido) {
 		this.id = id;
 		this.usuario = usuario;
 		this.motivoGeral = motivoGeral;
@@ -111,11 +111,11 @@ public class PedidoOracao implements Serializable {
 		this.motivoPessoal = motivoPessoal;
 	}
 	
-	public String getIsAnonimo() {
+	public boolean getIsAnonimo() {
 		return isAnonimo;
 	}
 	
-	public void setIsAnonimo(String isAnonimo) {
+	public void setIsAnonimo(boolean isAnonimo) {
 		this.isAnonimo = isAnonimo;
 	}
 	

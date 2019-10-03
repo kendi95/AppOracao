@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,10 +36,12 @@ public class Usuario implements Serializable {
 	private String telefone;
 	
 	private TipoUsuario tipo;
+	
+	private String imageURL;
 
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "usuario")
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
 	private List<PedidoOracao> pedidos = new ArrayList<>();
 	
 	
@@ -48,7 +51,7 @@ public class Usuario implements Serializable {
 	}
 
 
-	public Usuario(Long id, String nome, String email, String senha, String estado, String cidade, String telefone) {
+	public Usuario(Long id, String nome, String email, String senha, String estado, String cidade, String telefone, String imageURL) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -57,6 +60,7 @@ public class Usuario implements Serializable {
 		this.estado = estado;
 		this.cidade = cidade;
 		this.telefone = telefone;
+		this.imageURL = imageURL;
 	}
 
 
@@ -135,6 +139,14 @@ public class Usuario implements Serializable {
 	
 	public void setTipo(TipoUsuario tipo) {
 		this.tipo = tipo;
+	}
+	
+	public String getImageURL() {
+		return imageURL;
+	}
+	
+	public void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
 	}
 	
 	public List<PedidoOracao> getPedidos() {

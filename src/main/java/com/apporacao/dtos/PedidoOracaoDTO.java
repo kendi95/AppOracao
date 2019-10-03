@@ -18,13 +18,15 @@ public class PedidoOracaoDTO implements Serializable {
 	private String motivoPessoal;
 	private String motivoDescricao;
 	
-	private String isAnonimo;
+	private boolean isAnonimo;
 	
 	private String nome_autor;
 	
 	private Date data_pedido;
 	
 	private List<Usuario> usuarios = new ArrayList<>();
+	
+	private Usuario usuario;
 	
 	
 	
@@ -45,6 +47,7 @@ public class PedidoOracaoDTO implements Serializable {
 		this.isAnonimo = pedido.getIsAnonimo();
 		this.data_pedido = pedido.getData_pedido();
 		this.usuarios = pedido.getUsuarios();
+		this.usuario = pedido.getUsuario();
 	}
 
 	public Long getId() {
@@ -80,11 +83,11 @@ public class PedidoOracaoDTO implements Serializable {
 		this.motivoDescricao = motivoDescricao;
 	}
 	
-	public String getIsAnonimo() {
+	public boolean getIsAnonimo() {
 		return isAnonimo;
 	}
 	
-	public void setIsAnonimo(String isAnonimo) {
+	public void setIsAnonimo(boolean isAnonimo) {
 		this.isAnonimo = isAnonimo;
 	}
 	
@@ -112,4 +115,11 @@ public class PedidoOracaoDTO implements Serializable {
 		this.usuarios = usuarios;
 	}
 	
+	public Usuario getUsuario() {
+		return usuario;
+	}
+	
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 }

@@ -40,5 +40,10 @@ public class UsuarioController {
 	public ResponseEntity<DefaultUsuarioDTO> update(@RequestBody DefaultUsuarioDTO dto){
 		return ResponseEntity.ok(service.update(dto));
 	}
+	
+	@RequestMapping(value = "/usuario", method = RequestMethod.PATCH)
+	public ResponseEntity<DefaultUsuarioDTO> updateImage(@RequestBody DefaultUsuarioDTO dto){
+		return ResponseEntity.ok(service.updateImage(dto));
+	}
 
 }

@@ -41,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	};
 	
 	private static final String[] publicMatchersPacth = {
-			"/auth/new_password_with_code/**"
+			"/auth/new_password/**"
 	};
 	
 	@Override
