@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.apporacao.dtos.PedidoOracaoDTO;
@@ -127,6 +130,23 @@ public class PedidoOracaoService {
 	}
 	
 	
+	public Page<PedidoOracaoDTO> search(Integer page, Integer linesPerPage, String direction){
+		UserDetailImplementation user = UserDetailServiceImplementation.getAuthentication();
+		if(user == null) {
+			throw new AuthorizationException("Email não corresponde com o email de login");
+		} else {
+			Usuario usuario = usuarioRepo.findByEmail(user.getUsername());
+			if(usuario == null) {
+				throw new AuthorizationException("Email não corresponde com o email de login");
+			}
+			PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), "");
+			
+			Page<PedidoOracaoDTO> pages = searchPedido(usuario, pageRequest);
+			return pages;
+		}
+	}
+	
+	
 	
 	
 	private List<PedidoOracaoDTO> findPedidos(Usuario usuario){
@@ -171,5 +191,25 @@ public class PedidoOracaoService {
 		return dtos;
 	}
 	
+	
+	private Page<PedidoOracaoDTO> searchPedido(Usuario usuario, PageRequest pageRequest){
+		Page<PedidoOracaoDTO> dtos = null;
+		for(PedidoOracao page: repo.search(pageRequest)) {
+			if(page.getUsuario().getId() != null) {
+				if(page.getUsuario().getId() == usuario.getId()) {
+					PedidoOracaoDTO dto = new PedidoOracaoDTO(page);
+					if(dto.getIsAnonimo() == true) {
+						dto.setNome_autor("Anônimo");
+					} else {
+						dto.setNome_autor(page.getUsuario().getNome());
+					}
+					dtos.getContent().add(dto);
+				}
+			} else {
+				continue;
+			}
+		}
+		return dtos;
+	}
 	
 }

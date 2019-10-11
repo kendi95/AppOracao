@@ -60,9 +60,9 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 		String imageURL = ((UserDetailImplementation) authResult.getPrincipal()).getImageURL();
 		
 		if(tipo == TipoUsuario.ADMIN.getTipo()) {
-			response.getWriter().write(responseJson(name, true, email, null));
+			response.getWriter().write(responseJson(name, true, email, imageURL));
 		} else {
-			response.getWriter().write(responseJson(name, false, email, null));
+			response.getWriter().write(responseJson(name, false, email, imageURL));
 		}
 		
 		response.setContentType("application/json");

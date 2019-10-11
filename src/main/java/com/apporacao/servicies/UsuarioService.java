@@ -152,11 +152,13 @@ public class UsuarioService {
 			if(usuario == null) {
 				throw new ObjectNotFoundException("Email não encontrado.");
 			} else {
+				usuario.setNome(dto.getNome());
 				usuario.setEmail(dto.getEmail());
 				usuario.setTelefone(dto.getTelefone());
 				usuario.setCidade(dto.getCidade());
 				usuario.setEstado(dto.getEstado());
-				return new DefaultUsuarioDTO(repo.save(usuario));
+				usuario = repo.save(usuario);
+				return new DefaultUsuarioDTO(usuario);
 			}
 		}
 	}
