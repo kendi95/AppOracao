@@ -50,9 +50,9 @@ public class AppOraçãoApplication extends SpringBootServletInitializer impleme
 				"43 996961515", null);
 		usuario.setTipo(TipoUsuario.ADMIN);
 		
-		Usuario usuario2 = new Usuario(null, "Alisson", "kohatsukendi@gmail.com", encoder.encode("123456"), 
-				"Paraná", "Londrina", "43 99999-2222", null);
-		usuario2.setTipo(TipoUsuario.COMUM);
+//		Usuario usuario2 = new Usuario(null, "Alisson", "kohatsukendi@gmail.com", encoder.encode("123456"), 
+//				"Paraná", "Londrina", "43 99999-2222", null);
+//		usuario2.setTipo(TipoUsuario.COMUM);
 //		
 //		Usuario usuario2 = new Usuario(null, "William", "william@gmail.com", encoder.encode("123456"), 
 //				"Paraná", "Londrina", "43 99999-2222");
@@ -104,7 +104,7 @@ public class AppOraçãoApplication extends SpringBootServletInitializer impleme
 //		mGeral.setmGDescricao(Arrays.asList(mGDescricao));
 //		mGeral2.setmGDescricao(Arrays.asList(mGDescricao2));
 		
-		repo.saveAll(Arrays.asList(usuario, usuario2));
+		repo.saveAll(Arrays.asList(usuario));
 		pedidoRepo.saveAll(Arrays.asList(pedidoGeral));
 //		motivoGeralRepo.saveAll(Arrays.asList(mGeral, mGeral2));
 //		mGDescricaoRepo.saveAll(Arrays.asList(mGDescricao, mGDescricao2));
